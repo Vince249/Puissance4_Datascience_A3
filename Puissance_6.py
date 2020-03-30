@@ -34,7 +34,7 @@ Elle va nous indiquer le play qu'elle recommande
 #ALPHA BETA
 
 t1=time.time()
-etat2 = [['','',''],['','',''],['','','']] 
+etat2 = [['X','',''],['','O',''],['','','']] 
 result_AlphaBetaMiniMax = AlphaBetaMiniMax.Alpha_Beta(etat2,'X')
 print('Algorithme Elagage AlphaBeta')
 print('Solution trouvée en '+ str(time.time()-t1 ) + ' s')
