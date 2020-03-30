@@ -51,7 +51,25 @@ Une fois tout celà fait votre répertoire est opérationnel !
 
 Par la suite on créera sans doute plusieurs branches pour le développement de chaque feature et il faudra être vigilant à la branche sur laquelle vous êtes avant de tenter de pull ou push du code.
 
+# Utilisation normale
 
+Pour utiliser GitHub avec Visual Studio Code il vous suffit de quelques notions simples.
+
+
+Quand vous modifiez un fichier track par GitHub, un petit 1 va apparaître sur la gauche de votre écran (c'est le source control)
+
+Les modifications sont envoyés à Git par paquet appelés 'commit', en général on veut envoyer plusieurs modifications d'un coup (des      lignes en plus sur un fichier, d'autres en moins sur un autre, etc)
+
+Pour ce faire allez dans l'onglet Source control et cliquez sur le '+' à côté des changements que vous voulez ajouter ('stage') au prochain commit (vous pouvez toujours revenir en arrière et en retirer un du commit).
+
+Vous devez ensuite indiquer un commit message (qui doit être un résumé bref des modifications qu'apporte ce commit) puis cliquer sur la checkmark au dessus pour confirmer le commit
+
+Si vous regardez en bas à gauche de votre écran vous devriez voir une sorte d'ouroboros, il indique le nombre de commit de retard que votre version du projet a ainsi que le nombre de commit d'avance que vous avez.
+
+En cliquant dessus, vous faites à la fois un 'pull' (récupérer le contenu des commits de retard) et un 'push' (envoyer vos propres commits).
+
+
+Vous avez maintenant des bases de GitHub suffisantes pour travailler en autonomie !
   
   # ATTENTION
   
