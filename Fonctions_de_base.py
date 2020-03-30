@@ -1,3 +1,5 @@
+import Initialisation
+import numpy as np
 
 '''
 Liste les actions possibles à partir d'un état donné
@@ -32,13 +34,69 @@ def Result(state,action):
 
 '''
 Vérifie si l'état state est terminal
-@ state     Une liste de liste au format [[-,-,-],[-,-,-],[-,-,-]] avec les symboles correspondants
+@ state     Un tableau 2D similaire à une liste de liste mais avec numpy ([[-,-,-,-,-,-],[-,-,-],[-,-,-]]) avec les symboles correspondants
 @ nb        Le nombre de cases qui doivent être alignées pour finir
 @ return    True/False
-
-UNIT TEST FAIT
 '''
-def Terminal_Test(state,nb=3):
+def Terminal_Test(state,nb=6):
+    nb_Ligne, nb_Colonne = np.shape(state) #Récupère les dimensions de la matrice avec numpy
+    end_Game = False 
+    empty_box = "." #Symbole de la case vide
+    
+    #CAS 1 : Visctoire d'un des joueurs
+    #Test Sur les LIGNES && COLONNES
+    for i in range(nb_Ligne):
+        for j in range(nb_Colonne):
+            if(state[i,j] != empty_box):
+                #Test sur la ligne
+                if(j+ nb <= nb_Colonne and (np.all(state[i, j:j+nb] == 'X') or np.all(state[i, j:j+nb] == 'O'))):
+                    #Vérification de ne pas sortir de la matrice
+                    #Si toute les valeurs de la liste =='X' or 'O' alors ...
+                    #Slicing : sur la ligne i on prend les éléments de j à j+6 (j+6 exclu) donc 6 éléments
+                    return True #end_Game = True et on le renvoie directement pr sortir de la méthode
+               
+                #Test sur la colonne
+                if(i+nb <= nb_Colonne and (np.all(state[i:i+nb ,j] == 'X') or np.all(state[i:i+nb ,j] == 'O'))):
+                    return True #end_Game = True
+                
+                #Test sur la Diagonale
+                if(i+nb <= nb_Ligne and i+nb >= 0 and j+nb <= nb_Colonne): #On crée un carré de dimension i+nb x j+nb (ici 6x6)                 
+                    #On ne regarde qu'à droite de la case car les diagonales sur la gauches seront testées à un autre moment avec leur somment donc en analysant vers la droite
+                    #Diagnole montante/descendante vers la droite
+                    cpt = 0 #Compteur du nombre de cases identiques
+                    add = 1 #Variation de la ligne t de la colonne
+                    end_Game=True
+                    while(cpt < nb and end_Game==True):
+                        if(state[i+add, j+add] != state[i,j]): #Une case sur la diago est != de la case d'origine => On arrete
+                            end_Game = False
+                            break
+                        else:
+                            cpt+=1
+                            add+=1
+                    if(cpt==nb):
+                        return True #Un joueur a gagné
+                    #On teste l'autre diagonale car pas de victoire
+                    cpt=0 
+                    end_Game = True 
+                    #Diagonale descendante vers la droite
+                    while(cpt < nb and end_Game==True):
+                        if(state[i-add, j+add] != state[i,j]): #Une case sur la diago est != de la case d'origine => On arrete
+                            end_Game = False
+                            break
+                        else:
+                            cpt+=1
+                            add+=1
+                    if(cpt==nb):
+                        return True #Un joueur a gagné                        
+
+    #CAS 2 : Jeu plein
+    end_Game = True
+    if(np.any(state[0, : ] == empty_box)): #Si au moins une case de la ligne du sommet == "."
+        end_Game = False #Au moins une case est vide donc la matrice n'est pas pleine
+    return end_Game
+
+'''   Ancien code Pour le Morpion :
+
     reponse = False
     plein = True
     #si toutes les cases sont remplies, fini
@@ -66,6 +124,7 @@ def Terminal_Test(state,nb=3):
     else:
         reponse= True
     return reponse
+'''
 
 '''
 Détermine l'intérêt d'un état
@@ -104,3 +163,11 @@ def Utility (state, joueur):
 
     return result
 
+
+#! Test unitaire pour vérifier le fonctionnement des méthodes
+if __name__ == '__main__':
+    mat = Initialisation.Plateau()
+    #print(mat)
+    
+    mat.myMat[0] = ['O','X','O','O','O','O','O','X','X','O','X','X','O','O','X','X','X','X','X']
+    print("Etat terminale de mat : ", Terminal_Test(mat.myMat))
