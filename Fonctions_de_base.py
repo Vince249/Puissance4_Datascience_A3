@@ -17,14 +17,14 @@ On a donc besoin de juste parcourir la première ligne de la matrice :
    * si la case de la colonne est vide, alors on peut jouer dans cette colonne
    * sinon, on ne peut pas jouer dedans car la colonne est remplie.
 '''
-def Action (state, joueur):
+def Action (state):
     liste_actions = []
     ligne=0
     for j in range (nb_Colonne):
         if(state[ligne,j] != 'X' and state[ligne,j] != 'O'):
             liste_actions.append(j)
             break
-    return [joueur,liste_actions]
+    return liste_actions
 
 '''
 Applique l'action à l'état state, on procède avec la fonction .copy() pour ne pas modifier le state d'origine
@@ -32,7 +32,7 @@ Applique l'action à l'état state, on procède avec la fonction .copy() pour ne
 @ action    Liste [joueur,j] avec joueur : 'X' ou 'O'
 @ return    Le nouveau state avec les symboles correspondants
 '''
-def Result(state,action):
+def Result(state,action,joueur):
     '''
     Liens : https://www.science-emergence.com/Articles/Copier-une-matrice-avec-numpy-de-python/
     #! Importer copy : import copy
@@ -213,5 +213,5 @@ if __name__ == '__main__':
     print("Etat terminale de mat : ", Terminal_Test(mat.myMat))
 
     #TEST de Result()
-    mat = Result(mat, ['O', 0])#Affecte la valeur 'O' à la colonne 0
+    mat = Result(mat,0,'O')#Affecte la valeur 'O' à la colonne 0
     print(mat)
