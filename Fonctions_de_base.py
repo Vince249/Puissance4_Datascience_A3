@@ -9,12 +9,23 @@ Liste les actions possibles à partir d'un état donné
 
 UNIT TEST FAIT
 '''
+#Cette méthode va retourner toutes les actions possibles à l'état state pour le joueur.
+#On va donc retourner une liste de 19 entiers : l'indice de la liste correspond au numéro de colonne et 
+#l'entier à cet indice correspond au numéro de ligne.
+#On va parcourir la matrice colonne par colonne. On part du haut de chaque colonne et tant qu'on n'est pas
+#tombé sur une case non vide, on continue à la ligne suivante. Lorsque l'on tombe sur une case non vide,
+#On rentre le numéro de la ligne de la case au dessus.
 def Action (state, joueur):
     liste_actions = []
-    for i in range(len(state)):
-        for j in range (len(state)):
-            if(state[i][j] != 'X' and state[i][j] != 'O'):
-                liste_actions.append([joueur,i,j])
+    for i in range(nb_Colonne):
+        for j in range (nb_Ligne):
+            if(state[j][i] == 'X' or state[j][i] == 'O'):
+                liste_actions.append(nb_Ligne-1)
+                break
+            #Si on a parcouru toutes les cases de la colonne et que toutes étaient vides, 
+            #on ajoute le numéro de cette dernière ligne à la liste
+            elif(j==nb_Ligne-1):
+                liste_action.append(j)
     return liste_actions
 
 '''
