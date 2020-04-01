@@ -24,7 +24,7 @@ def Action (state, joueur):
         if(state[ligne,j] != 'X' and state[ligne,j] != 'O'):
             liste_actions.append(j)
             break
-    return liste_actions
+    return [joueur,liste_actions]
 
 '''
 Applique l'action à l'état state, on procède avec la fonction .copy() pour ne pas modifier le state d'origine
