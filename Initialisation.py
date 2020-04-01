@@ -59,7 +59,7 @@ class Plateau:
     '''
     def __setitem__(self,tupl,value):
         x,y = tupl
-        self.myMat[y,x] = value
+        self.myMat[x,y] = value
         return
     '''
     #! Surcharge de la fonction getitem, permet d'obtenir manuellement la valeur d'une case
@@ -69,7 +69,7 @@ class Plateau:
     '''
     def __getitem__(self,tupl):
         x,y = tupl
-        return self.myMat[y,x]
+        return self.myMat[x,y]
 
 
 if __name__ == '__main__':

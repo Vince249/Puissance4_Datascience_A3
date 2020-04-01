@@ -10,12 +10,20 @@ Liste les actions possibles à partir d'un état donné
 
 UNIT TEST FAIT
 '''
+
+'''
+Cette méthode va renvoyer la liste des colonnes dans lesquelles on peut encore jouer.
+On a donc besoin de juste parcourir la première ligne de la matrice : 
+   * si la case de la colonne est vide, alors on peut jouer dans cette colonne
+   * sinon, on ne peut pas jouer dedans car la colonne est remplie.
+'''
 def Action (state, joueur):
     liste_actions = []
-    for i in range(len(state)):
-        for j in range (len(state)):
-            if(state[i][j] != 'X' and state[i][j] != 'O'):
-                liste_actions.append([joueur,i,j])
+    ligne=0
+    for j in range (nb_Colonne):
+        if(state[ligne,j] != 'X' and state[ligne,j] != 'O'):
+            liste_actions.append(j)
+            break
     return liste_actions
 
 '''
@@ -40,7 +48,7 @@ def Result(state,action):
 
     for i in range(19):
         for j in range(19):
-            print(result[j,i], end=" / ")
+            print(result[i,j], end=" / ")
         print()
 
     #result[row, column] = action[0]#On affecte la valeur de joueur à la case correspondante
