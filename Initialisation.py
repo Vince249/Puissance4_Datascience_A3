@@ -50,8 +50,32 @@ class Plateau:
 
         return("\nVous pouvez jouer !")
         
+    '''
+    #! Surcharge de la fonction setitem, permet de fixer manuellement la valeur d'une case
+
+    @ tuple     tupl    Contient les coordonnées du point auquel on veut attribuer une value
+    @ string    value   La value qu'on veut attribuer à la case
+    @ None      return
+    '''
+    def __setitem__(self,tupl,value):
+        x,y = tupl
+        self.myMat[y,x] = value
+        return
+    '''
+    #! Surcharge de la fonction getitem, permet d'obtenir manuellement la valeur d'une case
+
+    @ tuple     tupl    Contient les coordonnées du point duquel on veut voir la value
+    @ string    return  La value contenue dans la case choisie
+    '''
+    def __getitem__(self,tupl):
+        x,y = tupl
+        return self.myMat[y,x]
+
 
 if __name__ == '__main__':
     mat = Plateau()
-    #print(mat)
+    mat[0,0]='X'
+    mat[3,0]='X'
+    print(mat)
+    print(mat[3,0])
 
