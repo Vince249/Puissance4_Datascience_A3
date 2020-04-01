@@ -40,7 +40,7 @@ def Result(state,action):
 
     for i in range(19):
         for j in range(19):
-            print(result[j,i], end=" / ")
+            print(result[i,j], end=" / ")
         print()
 
     #result[row, column] = action[0]#On affecte la valeur de joueur à la case correspondante
