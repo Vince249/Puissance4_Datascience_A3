@@ -77,3 +77,17 @@ Vous avez maintenant des bases de GitHub suffisantes pour travailler en autonomi
   - Pull AVANT de faire le moindre changement, sinon vous allez avoir des merges conflicts. C'est pas compliqué à résoudre mais ça peut     faire perdre du temps
   - Pas de panique si vous ratez un truc et supprimez des choses sur le Git, il est doté d'un système de version control qui permet de      restaurer des versions antérieures du repo. A moins de le faire exprès vous pourrez pas tout planter involontairement.
   - Les messages des commits doivent être clair (quoi, pourquoi, comment) pour éviter qu'on soit obligé de passer dernière pour             comprendre ce qui a changé (par exemple mes derniers commit sont très mauvais)
+
+# Extensions obligatoire
+
+  - Python
+  
+# Extensions recommandées
+
+  - Better Comments
+  - Bracket pair colorizer
+  - Git History
+  - Git Lens
+  - Kite Python autocomplete
+  - Material icon theme
+  - Output colorizer
