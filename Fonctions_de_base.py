@@ -20,7 +20,7 @@ On a donc besoin de juste parcourir la première ligne de la matrice :
 def Action (state):
     liste_actions = []
     ligne=0
-    for j in range (nb_Colonne):
+    for j in range (state.size_Colonne):
         if(state[ligne,j] != 'X' and state[ligne,j] != 'O'):
             liste_actions.append(j)
             break
