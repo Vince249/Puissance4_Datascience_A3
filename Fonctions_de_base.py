@@ -1,5 +1,6 @@
 import Initialisation
 import numpy as np
+import copy
 
 '''
 Liste les actions possibles à partir d'un état donné
@@ -30,18 +31,79 @@ def Action (state, joueur):
 
 '''
 Applique l'action à l'état state, on procède avec la fonction .copy() pour ne pas modifier le state d'origine
+@ state     Une liste de liste au format d'un tabelau multi-dimensionnel avec les symboles correspondants
+@ action    Liste [joueur,j] avec joueur : 'X' ou 'O'
+@ return    Le nouveau state avec les symboles correspondants
+'''
+def Result(state,action):
+    '''
+    Liens : https://www.science-emergence.com/Articles/Copier-une-matrice-avec-numpy-de-python/
+    #! Importer copy : import copy
+    #! On utilise une deepcopy
+    *Si on modifie la matrice y alors x n'est pas modifiée
+    '''
+    result = copy.deepcopy(state) #Copie de state en deepcopy donc changement de result ne change pas state
+    #Result est un tableau multi-dimensionnel donc utiliser la librairie numpy
+    #! Méthode de gravité qui renvoie x : valeur de la ligne
+    
+    column = action[1] 
+    row = Gravity(result, column)
+
+    for i in range(19):
+        for j in range(19):
+            print(result[i,j], end=" / ")
+        print()
+
+    #result[row, column] = action[0]#On affecte la valeur de joueur à la case correspondante
+    return result
+
+
+'''
+Applique l'action à l'état state, on procède avec la fonction .copy() pour ne pas modifier le state d'origine
 @ state     Une liste de liste au format [[-,-,-],[-,-,-],[-,-,-]] avec les symboles correspondants
 @ action    Liste [joueur,i,j] avec joueur : 'X' ou 'O'
 @ return    Le nouveau state au format [[-,-,-],[-,-,-],[-,-,-]] avec les symboles correspondants
 
 UNIT TEST FAIT
 '''
-def Result(state,action):
-    resultat = []
-    for liste in state:
-        resultat.append(liste.copy())
-    resultat[action[1]][action[2]]=action[0]
-    return resultat
+"""
+x = np.array([{'a':[1,2,3]}])
+y = copy.deepcopy(x)
+y
+array([{'a': [1, 2, 3]}], dtype=object)
+y[0]['a'].append(4)
+y
+array([{'a': [1, 2, 3, 4]}], dtype=object)
+x
+array([{'a': [1, 2, 3]}], dtype=object)
+"""
+'''
+resultat = []
+for liste in state:
+    resultat.append(liste.copy())
+resultat[action[1]][action[2]]=action[0]
+return resultat
+'''
+
+'''
+Fonction gravité pour une colonne
+@state      tableau multi-dimensionnel
+@column     valeur de la colonne à analyser
+@return     retourne la valeur x de la ligne libre
+'''
+def Gravity(state, column):
+    result = -1
+    empty_box = "." #Symbole de la case vide
+
+    maColonne = state[ : ,column] #Recupere toute les valeurs les lignes de la colonne column
+    for i in range(len(maColonne)):
+        #On commence par le bas
+        #if(maColonne[len(maColonne)-1-i] == empty_box):
+        if(maColonne[i] == empty_box):
+            result += 1 #valeur de la ligne            
+
+    return result
+
 
 '''
 Vérifie si l'état state est terminal
@@ -66,17 +128,17 @@ def Terminal_Test(state,nb=6):
                     #Slicing : sur la ligne i on prend les éléments de j à j+6 (j+6 exclu) donc 6 éléments
                     return True #end_Game = True et on le renvoie directement pr sortir de la méthode
                
-                #Test sur la colonne
+                #Test sur la colonne 
                 if(i+nb <= nb_Colonne and (np.all(state[i:i+nb ,j] == 'X') or np.all(state[i:i+nb ,j] == 'O'))):
                     return True #end_Game = True
                 
                 #Test sur la Diagonale
                 if(i+nb <= nb_Ligne and i+nb >= 0 and j+nb <= nb_Colonne): #On crée un carré de dimension i+nb x j+nb (ici 6x6)                 
                     #On ne regarde qu'à droite de la case car les diagonales sur la gauches seront testées à un autre moment avec leur somment donc en analysant vers la droite
-                    #Diagnole montante/descendante vers la droite
                     cpt = 0 #Compteur du nombre de cases identiques
                     add = 1 #Variation de la ligne t de la colonne
                     end_Game=True
+                    #Diagonale descendante vers la droite
                     while(cpt < nb and end_Game==True):
                         if(state[i+add, j+add] != state[i,j]): #Une case sur la diago est != de la case d'origine => On arrete
                             end_Game = False
@@ -89,7 +151,7 @@ def Terminal_Test(state,nb=6):
                     #On teste l'autre diagonale car pas de victoire
                     cpt=0 
                     end_Game = True 
-                    #Diagonale descendante vers la droite
+                    #Diagonale montante vers la droite
                     while(cpt < nb and end_Game==True):
                         if(state[i-add, j+add] != state[i,j]): #Une case sur la diago est != de la case d'origine => On arrete
                             end_Game = False
@@ -106,36 +168,6 @@ def Terminal_Test(state,nb=6):
         end_Game = False #Au moins une case est vide donc la matrice n'est pas pleine
     return end_Game
 
-'''   Ancien code Pour le Morpion :
-
-    reponse = False
-    plein = True
-    #si toutes les cases sont remplies, fini
-    #si 3 croix/ronds sont alignés
-    for element in state:
-        for case in element:
-            if(case != 'X' and case != 'O'): plein = False 
-    if(not plein):
-        #lignes
-        for element in state :
-            if (element == ['X','X','X'] or element == ['O','O','O']):
-                reponse = True
-        if(not reponse):
-            #colonnes
-            for i in range (len(state)):
-                listetemp = []
-                for j in range (len(state)):
-                    listetemp.append(state[j][i])
-                if (listetemp == ['X','X','X'] or listetemp == ['O','O','O']) :
-                    reponse = True
-            if(not reponse):
-                #diagonales
-                if((state[0][0] == state[1][1] and state[2][2] == state[1][1] and (state[1][1] == 'X' or state[1][1] == 'O')) or (state[1][1] == state[2][0] and state[2][0] == state[0][2] and (state[2][0] =='X' or state[2][0] =='O'))):
-                    reponse = True
-    else:
-        reponse= True
-    return reponse
-'''
 
 '''
 Détermine l'intérêt d'un état
@@ -182,3 +214,7 @@ if __name__ == '__main__':
     
     mat.myMat[0] = ['O','X','O','O','O','O','O','X','X','O','X','X','O','O','X','X','X','X','X']
     print("Etat terminale de mat : ", Terminal_Test(mat.myMat))
+
+    #TEST de Result()
+    mat = Result(mat, ['O', 0])#Affecte la valeur 'O' à la colonne 0
+    print(mat)
