@@ -1,5 +1,6 @@
 import Initialisation
 import numpy as np
+import copy
 
 '''
 Liste les actions possibles à partir d'un état donné
@@ -26,11 +27,39 @@ Applique l'action à l'état state, on procède avec la fonction .copy() pour ne
 UNIT TEST FAIT
 '''
 def Result(state,action):
-    resultat = []
-    for liste in state:
-        resultat.append(liste.copy())
-    resultat[action[1]][action[2]]=action[0]
-    return resultat
+    '''
+    Liens : https://www.science-emergence.com/Articles/Copier-une-matrice-avec-numpy-de-python/
+    #! Importer copy : import copy
+    #! On utilise une deepcopy
+    *Si on modifie la matrice y alors x n'est pas modifiée
+    '''
+    result = copy.deepcopy(state) #Copie de state en deepcopy donc changement de result ne change pas state
+    #Result est un tableau multi-dimensionnel donc utiliser la librairie numpy
+    #! Méthode de gravité qui renvoie [x,y] 
+    #x : ligne && y : colonne
+    
+    #Result prend la valeur du joueur : 'X' ou 'O'
+
+    return result
+
+"""
+x = np.array([{'a':[1,2,3]}])
+y = copy.deepcopy(x)
+y
+array([{'a': [1, 2, 3]}], dtype=object)
+y[0]['a'].append(4)
+y
+array([{'a': [1, 2, 3, 4]}], dtype=object)
+x
+array([{'a': [1, 2, 3]}], dtype=object)
+"""
+'''
+resultat = []
+for liste in state:
+    resultat.append(liste.copy())
+resultat[action[1]][action[2]]=action[0]
+return resultat
+'''
 
 '''
 Vérifie si l'état state est terminal
@@ -55,12 +84,12 @@ def Terminal_Test(state,nb=6):
                     #Slicing : sur la ligne i on prend les éléments de j à j+6 (j+6 exclu) donc 6 éléments
                     return True #end_Game = True et on le renvoie directement pr sortir de la méthode
                
-                #Test sur la colonne
+                #Test sur la colonne 
                 if(i+nb <= nb_Colonne and (np.all(state[i:i+nb ,j] == 'X') or np.all(state[i:i+nb ,j] == 'O'))):
                     return True #end_Game = True
                 
                 #Test sur la Diagonale
-                if(i+nb <= nb_Ligne and i+nb >= 0 and j+nb <= nb_Colonne): #On crée un carré de dimension i+nb x j+nb (ici 6x6)                 
+                if(i+nb <= nb_Ligne and j+nb <= nb_Colonne): #On crée un carré de dimension i+nb x j+nb (ici 6x6)                 
                     #On ne regarde qu'à droite de la case car les diagonales sur la gauches seront testées à un autre moment avec leur somment donc en analysant vers la droite
                     #Diagnole montante/descendante vers la droite
                     cpt = 0 #Compteur du nombre de cases identiques
