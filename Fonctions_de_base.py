@@ -29,7 +29,7 @@ def Action (state):
 '''
 Applique l'action à l'état state, on procède avec la fonction .copy() pour ne pas modifier le state d'origine
 @ state     Une liste de liste au format d'un tabelau multi-dimensionnel avec les symboles correspondants
-@ action    Liste [joueur,j] avec joueur : 'X' ou 'O'
+@ action    Colonne dans laquelle placer le symbole
 @ return    Le nouveau state avec les symboles correspondants
 '''
 def Result(state,action,joueur):
@@ -43,15 +43,10 @@ def Result(state,action,joueur):
     #Result est un tableau multi-dimensionnel donc utiliser la librairie numpy
     #! Méthode de gravité qui renvoie x : valeur de la ligne
     
-    column = action[1] 
+    column = action 
     row = Gravity(result, column)
-
-    for i in range(19):
-        for j in range(19):
-            print(result[i,j], end=" / ")
-        print()
-
-    #result[row, column] = action[0]#On affecte la valeur de joueur à la case correspondante
+    if(row ==-1) : return "ERREUR Votre play n'est pas valide"
+    result[row, column] = joueur#On affecte la valeur de joueur à la case correspondante
     return result
 
 
@@ -83,23 +78,16 @@ return resultat
 '''
 
 '''
-Fonction gravité pour une colonne
+Fonction gravité pour une colonne, elle return la ligne à laquelle on peut placer un symbole
 @state      tableau multi-dimensionnel
 @column     valeur de la colonne à analyser
-@return     retourne la valeur x de la ligne libre
+@return     retourne la valeur x de la ligne libre ou -1 s'il n'y en a pas
 '''
 def Gravity(state, column):
-    result = -1
-    empty_box = "." #Symbole de la case vide
 
-    maColonne = state[ : ,column] #Recupere toute les valeurs les lignes de la colonne column
-    for i in range(len(maColonne)):
-        #On commence par le bas
-        #if(maColonne[len(maColonne)-1-i] == empty_box):
-        if(maColonne[i] == empty_box):
-            result += 1 #valeur de la ligne            
-
-    return result
+    for i in range(state.size_Colonne-1,-1,-1): #De 18 à 0
+        if(state[i,column]=='.') : return i
+    return -1
 
 
 '''
@@ -209,9 +197,16 @@ if __name__ == '__main__':
     mat = Initialisation.Plateau()
     #print(mat)
     
-    mat.myMat[0] = ['O','X','O','O','O','O','O','X','X','O','X','X','O','O','X','X','X','X','X']
-    print("Etat terminale de mat : ", Terminal_Test(mat.myMat))
+
 
     #TEST de Result()
-    mat = Result(mat,0,'O')#Affecte la valeur 'O' à la colonne 0
+    mat = Result(mat,5,'X')#Affecte la valeur 'O' à la colonne 0
+    mat = Result(mat,0,'O')
+    for i in range(9):
+        mat = Result(mat,4,'O')
+        mat = Result(mat,4,'X')
+    mat = Result(mat,4,'O')
+    #! Tout s'empile bien, si on retire le # de la ligne suivante on essaie de mettre un X alors que la colonne est pleine
+    #! Un message d'erreur apparaîtra
+    #mat = Result(mat,4,'X') 
     print(mat)
