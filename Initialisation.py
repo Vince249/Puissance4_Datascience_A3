@@ -12,15 +12,15 @@ class Plateau:
         """
         Une liste de listes est transformée en un tableau multi-dimensionnel     
         """
-        self.size_Ligne = 19
-        self.size_Colonne = 19
+        self.size_Ligne = 6
+        self.size_Colonne = 12
         self.myMat = np.full((self.size_Ligne, self.size_Colonne), ".", dtype=str)
         #print(type(myMat[0,0])) #Pour s'assurer du type des valeurs dans la matrice
         #ligne, colonne = np.shape(self.myMat) #Récupère les dimensions de la matrice avec numpy
         #print("Nb de ligne de myMat = %d && Nb de colonne = %d" %(ligne,colonne)) #Afficher ces dimensions en précisant des valeurs décimales
         """
         np.full((size_Ligne, size_Colonne), ".", dtype=str)
-        *Crée un tableau 19x19 rempli du caratère "."
+        *Crée un tableau 6x12 rempli du caratère "." 6 Lignes et 12 colonnes
         *dtype = str : On force le type de donnée en précisant que l'on veut un string
         *np.full((n,p), 5) : Va créer un tableau multi-dimensionnel de dimension n lignes et p colonnes et va remplir chaque case par la valeur 5 qui par défaut est un int
         """

@@ -59,18 +59,18 @@ Fonction gravité pour une colonne, elle return la ligne à laquelle on peut pla
 '''
 def Gravity(state, column):
 
-    for i in range(state.size_Colonne-1,-1,-1): #De 18 à 0
+    for i in range(state.size_Ligne-1,-1,-1): #De 5 à 0
         if(state[i,column]=='.') : return i
     return -1
 
 
 '''
 Vérifie si l'état state est terminal
-@ state     Un tableau 2D similaire à une liste de liste mais avec numpy ([[-,-,-,-,-,-],[-,-,-],[-,-,-]]) avec les symboles correspondants
+@ state     Un tableau 2D similaire à une liste de liste mais avec numpy avec les symboles correspondants
 @ nb        Le nombre de cases qui doivent être alignées pour finir
 @ return    True si l'état est terminal/False sinon
 '''
-def Terminal_Test(plateau,nb=6):
+def Terminal_Test(plateau,nb=4):
     state = plateau.myMat
     nb_Ligne, nb_Colonne = np.shape(state) #Récupère les dimensions de la matrice avec numpy
     end_Game = False 
@@ -89,13 +89,14 @@ def Terminal_Test(plateau,nb=6):
                     return True #end_Game = True et on le renvoie directement pr sortir de la méthode
                
                 #Test sur la colonne 
-                if(i+nb <= nb_Colonne and (np.all(state[i:i+nb ,j] == 'X') or np.all(state[i:i+nb ,j] == 'O'))):
+                if(i+nb <= nb_Ligne and (np.all(state[i:i+nb ,j] == 'X') or np.all(state[i:i+nb ,j] == 'O'))):
                     return True #end_Game = True
                 
                 #Test sur la Diagonale
-                if(i+nb <= nb_Ligne and i+nb >= 0 and j+nb <= nb_Colonne): #On crée un carré de dimension i+nb x j+nb (ici 6x6)                 
+                #and i-nb >= 0 
+                if(i+nb <= nb_Ligne and j+nb <= nb_Colonne): #On crée un carré de dimension i+nb x j+nb (ici 4x4)                 
                     #On ne regarde qu'à droite de la case car les diagonales sur la gauches seront testées à un autre moment avec leur somment donc en analysant vers la droite
-                    cpt = 0 #Compteur du nombre de cases identiques
+                    cpt = 1 #Compteur du nombre de cases identiques : La PREMIERE case est déjà comptabilisée
                     add = 1 #Variation de la ligne t de la colonne
                     end_Game=True
                     #Diagonale descendante vers la droite
@@ -109,7 +110,9 @@ def Terminal_Test(plateau,nb=6):
                     if(cpt==nb):
                         return True #Un joueur a gagné
                     #On teste l'autre diagonale car pas de victoire
-                    cpt=0 
+                if(i-nb >= 0 and j+nb <= nb_Colonne):
+                    cpt= 1 #La PREMIERE case est déjà comptabilisée
+                    add = 1
                     end_Game = True 
                     #Diagonale montante vers la droite
                     while(cpt < nb and end_Game==True):
@@ -175,11 +178,12 @@ if __name__ == '__main__':
 
 
     #TEST de Result()
-    mat = Result(mat,5,'X')#Affecte la valeur 'O' à la colonne 0
+    mat = Result(mat,5,'X')#Affecte la valeur 'O' à la colonne d'index 5 (6e colonne)
     mat = Result(mat,0,'O')
-    for i in range(9):
+    for i in range(2):
         mat = Result(mat,4,'O')
         mat = Result(mat,4,'X')
+    mat = Result(mat,4,'X')
     mat = Result(mat,4,'O')
     #! Tout s'empile bien, si on retire le # de la ligne suivante on essaie de mettre un X alors que la colonne est pleine
     #! Un message d'erreur apparaîtra

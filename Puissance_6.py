@@ -26,10 +26,11 @@ fonction pour définir la valeur d'action --> évite les erreurs de types ou val
 '''
 def Selection_colonne(phrase):
     action=-1
+    dim_Colonne = 12
     while True:
         try:
             action = int(input(phrase))
-            if (action >= 0 and action <= 18) : break
+            if (action >= 0 and action <= dim_Colonne) : break
         except ValueError:
             print("Erreur : type de l'input")
     return action
@@ -64,7 +65,7 @@ if __name__ == '__main__':
         
         if(first == humain): #Si l'humain joue en premier
             print(plateau)
-            action = Selection_colonne('Humain, indique la colonne dans laquelle tu veux placer ton pion (0-18) \n')
+            action = Selection_colonne('Humain, indique la colonne dans laquelle tu veux placer ton pion (0-11) \n')
             plateau = Fonctions_de_base.Result(plateau,action,humain)        
             #!Si la partie est finie, l'IA ne joue pas
             check_partie_fini = Fonctions_de_base.Terminal_Test(plateau)
@@ -72,7 +73,7 @@ if __name__ == '__main__':
 
         #L'IA détermine son play ici (pour l'instant c'est un autre humain qui joue)
         print(plateau)
-        action = Selection_colonne('IA, indique la colonne dans laquelle tu veux placer ton pion (0-18) \n')
+        action = Selection_colonne('IA, indique la colonne dans laquelle tu veux placer ton pion (0-11) \n')
         clear()
         plateau = Fonctions_de_base.Result(plateau,action,ia)
         #!Si la partie est finie, l'humain ne joue pas
@@ -81,7 +82,7 @@ if __name__ == '__main__':
 
         if(first == ia): #Si l'IA joue en premier
             print(plateau)
-            action = Selection_colonne('Humain, indique la colonne dans laquelle tu veux placer ton pion (0-18) \n')
+            action = Selection_colonne('Humain, indique la colonne dans laquelle tu veux placer ton pion (0-11) \n')
             clear()
             plateau = Fonctions_de_base.Result(plateau,action,humain)
             #!Si la partie est finie, l'IA ne joue pas
