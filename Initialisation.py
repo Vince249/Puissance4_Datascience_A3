@@ -48,7 +48,7 @@ class Plateau:
         for j in range(0,self.size_Colonne*4+1):
             print("-", end="")
 
-        return("\nVous pouvez jouer !")
+        return ''
         
     '''
     #! Surcharge de la fonction setitem, permet de fixer manuellement la valeur d'une case

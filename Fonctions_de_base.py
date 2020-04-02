@@ -50,32 +50,6 @@ def Result(state,action,joueur):
     return result
 
 
-'''
-Applique l'action à l'état state, on procède avec la fonction .copy() pour ne pas modifier le state d'origine
-@ state     Une liste de liste au format [[-,-,-],[-,-,-],[-,-,-]] avec les symboles correspondants
-@ action    Liste [joueur,i,j] avec joueur : 'X' ou 'O'
-@ return    Le nouveau state au format [[-,-,-],[-,-,-],[-,-,-]] avec les symboles correspondants
-
-UNIT TEST FAIT
-'''
-"""
-x = np.array([{'a':[1,2,3]}])
-y = copy.deepcopy(x)
-y
-array([{'a': [1, 2, 3]}], dtype=object)
-y[0]['a'].append(4)
-y
-array([{'a': [1, 2, 3, 4]}], dtype=object)
-x
-array([{'a': [1, 2, 3]}], dtype=object)
-"""
-'''
-resultat = []
-for liste in state:
-    resultat.append(liste.copy())
-resultat[action[1]][action[2]]=action[0]
-return resultat
-'''
 
 '''
 Fonction gravité pour une colonne, elle return la ligne à laquelle on peut placer un symbole
@@ -94,9 +68,10 @@ def Gravity(state, column):
 Vérifie si l'état state est terminal
 @ state     Un tableau 2D similaire à une liste de liste mais avec numpy ([[-,-,-,-,-,-],[-,-,-],[-,-,-]]) avec les symboles correspondants
 @ nb        Le nombre de cases qui doivent être alignées pour finir
-@ return    True/False
+@ return    True si l'état est terminal/False sinon
 '''
-def Terminal_Test(state,nb=6):
+def Terminal_Test(plateau,nb=6):
+    state = plateau.myMat
     nb_Ligne, nb_Colonne = np.shape(state) #Récupère les dimensions de la matrice avec numpy
     end_Game = False 
     empty_box = "." #Symbole de la case vide
