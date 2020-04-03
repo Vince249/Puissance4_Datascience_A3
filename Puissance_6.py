@@ -65,15 +65,29 @@ if __name__ == '__main__':
         
         if(first == humain): #Si l'humain joue en premier
             print(plateau)
-            action = Selection_colonne('Humain, indique la colonne dans laquelle tu veux placer ton pion (0-11) \n')
+            list_Actions = Fonctions_de_base.Action(plateau) #On recupere toutes les actions possibles
+            print("Action(s) possible(s) : ", list_Actions)
+            action = ""
+            action_Autorise = False #Verification que ce coup est autorise
+            while(action_Autorise == False): 
+                action = Selection_colonne('\nHumain, indique la colonne dans laquelle tu veux placer ton pion (0-11) \n')
+                if(action in list_Actions):
+                    action_Autorise = True
+
             plateau = Fonctions_de_base.Result(plateau,action,humain)        
             #!Si la partie est finie, l'IA ne joue pas
             check_partie_fini = Fonctions_de_base.Terminal_Test(plateau)
             if(check_partie_fini) : break
 
-        #L'IA détermine son play ici (pour l'instant c'est un autre humain qui joue)
+        #! L'IA détermine son play ici (pour l'instant c'est un autre humain qui joue)
         print(plateau)
-        action = Selection_colonne('IA, indique la colonne dans laquelle tu veux placer ton pion (0-11) \n')
+        list_Actions = Fonctions_de_base.Action(plateau) #On recupere toutes les actions possibles
+        print("Action(s) possible(s) : ", list_Actions)
+        action_Autorise = False #Verification que ce coup est autorise
+        while(action_Autorise == False): 
+            action = Selection_colonne('IA, indique la colonne dans laquelle tu veux placer ton pion (0-11) \n')
+            if(action in list_Actions):
+                action_Autorise = True        
         clear()
         plateau = Fonctions_de_base.Result(plateau,action,ia)
         #!Si la partie est finie, l'humain ne joue pas

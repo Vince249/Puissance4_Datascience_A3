@@ -21,9 +21,10 @@ def Action (state):
     liste_actions = []
     ligne=0
     for j in range (state.size_Colonne):
+        #On ne regarde que la case au sommet du plateau de jeu car si elle n'est pas remplie alors il est possible d'y joueur au-moins une fois
         if(state[ligne,j] != 'X' and state[ligne,j] != 'O'):
             liste_actions.append(j)
-            break
+            
     return liste_actions
 
 '''
@@ -183,9 +184,13 @@ if __name__ == '__main__':
     for i in range(2):
         mat = Result(mat,4,'O')
         mat = Result(mat,4,'X')
-    mat = Result(mat,4,'X')
+    mat = Result(mat,4,'X')    
+    print(mat)
+    print(Action(mat))#Renvoie [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11] car à ce moment là il rest 1 case dans la colonne 4
     mat = Result(mat,4,'O')
+
     #! Tout s'empile bien, si on retire le # de la ligne suivante on essaie de mettre un X alors que la colonne est pleine
     #! Un message d'erreur apparaîtra
     #mat = Result(mat,4,'X') 
     print(mat)
+    print(Action(mat))#Renvoie [0, 1, 2, 3, 5, 6, 7, 8, 9, 10, 11] car à ce moment là, colonne 4 pleine
