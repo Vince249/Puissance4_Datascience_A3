@@ -176,6 +176,7 @@ Détermine l'intérêt d'un état
 @ posi_Player    Le symbole correspondant au joueur voulant gagner (X/O)
 @ nega_Player    Le symbole correspondant au joueur voulant perdre (X/O)
 @ return         Valeur de l'état pour positive_Player
+*Inspiration site_Web (fin de la page): https://www.christian-schmidt.fr/puissance4
 '''
 def Utility (state, posi_Player, nega_Player):
     mat_Reference = np.array([[3,4,5,7,7,7,7,7,7,5,4,3],
