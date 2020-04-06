@@ -141,7 +141,7 @@ Détermine l'intérêt d'un état
 
 UNIT TEST FAIT
 '''
-def Utility (state, joueur):
+def Utility_OLD (state, joueur):
     #ligne
     result = 0
     for element in state :
@@ -170,14 +170,39 @@ def Utility (state, joueur):
 
     return result
 
+'''
+Détermine l'intérêt d'un état
+@ state          Tableau multi-dimensionnel
+@ posi_Player    Le symbole correspondant au joueur voulant gagner (X/O)
+@ nega_Player    Le symbole correspondant au joueur voulant perdre (X/O)
+@ return         Valeur de l'état pour positive_Player
+'''
+def Utility (state, posi_Player, nega_Player):
+    mat_Reference = np.array([[3,4,5,7,7,7,7,7,7,5,4,3],
+                              [4,6,8,10,10,10,10,10,10,8,6,4],
+                              [5,8,11,13,13,13,13,13,13,11,8,5],
+                              [5,8,11,13,13,13,13,13,13,11,8,5],
+                              [4,6,8,10,10,10,10,10,10,8,6,4],
+                              [3,4,5,7,7,7,7,7,7,5,4,3]])
+
+    result = 0
+    for i in range(state.size_Ligne):
+        for j in range(state.size_Colonne):
+            if(state[i,j] == posi_Player):
+                result += mat_Reference[i,j]
+            elif(state[i,j] == nega_Player):
+                result -= mat_Reference[i,j]
+
+    return result
+
 
 #! Test unitaire pour vérifier le fonctionnement des méthodes
 if __name__ == '__main__':
-    mat = Initialisation.Plateau()
-    #print(mat)
     
+    mat = Initialisation.Plateau()
+    #print(mat)    
 
-
+    '''
     #TEST de Result()
     mat = Result(mat,5,'X')#Affecte la valeur 'O' à la colonne d'index 5 (6e colonne)
     mat = Result(mat,0,'O')
@@ -194,3 +219,13 @@ if __name__ == '__main__':
     #mat = Result(mat,4,'X') 
     print(mat)
     print(Action(mat))#Renvoie [0, 1, 2, 3, 5, 6, 7, 8, 9, 10, 11] car à ce moment là, colonne 4 pleine
+    '''
+
+    #TEST de Utility()
+    for i in range(2):
+        mat = Result(mat,4,'O')
+        mat = Result(mat,4,'X')
+    mat = Result(mat,4,'X')    
+    print(mat)
+    val = Utility(mat, 'X', 'O')
+    print("Valeur de l'Utility = ", val)

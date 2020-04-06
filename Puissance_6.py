@@ -82,19 +82,25 @@ if __name__ == '__main__':
         #! L'IA détermine son play ici (pour l'instant c'est un autre humain qui joue)
         print(plateau)
         list_Actions = Fonctions_de_base.Action(plateau) #On recupere toutes les actions possibles
-        print("Action(s) possible(s) : ", list_Actions)
+        print("Action(s) possible(s) pour l'IA : ", list_Actions)
+
+        '''#CAS SANS UTILISATION DE L'IA : Debut du projet
         action_Autorise = False #Verification que ce coup est autorise
         while(action_Autorise == False): 
             action = Selection_colonne('IA, indique la colonne dans laquelle tu veux placer ton pion (0-11) \n')
             if(action in list_Actions):
                 action_Autorise = True        
+        '''
+        #Methode MiniMax pour determiner le meilleur coups
+        action = MiniMax.MiniMax_Decision(plateau, ia)
+
         clear()
         plateau = Fonctions_de_base.Result(plateau,action,ia)
         #!Si la partie est finie, l'humain ne joue pas
         check_partie_fini = Fonctions_de_base.Terminal_Test(plateau)
         if(check_partie_fini) : break
 
-        if(first == ia): #Si l'IA joue en premier
+        if(first == ia): #Si l'IA joue en premier maintenant c'est le tour de l'Humain
             print(plateau)
             action = Selection_colonne('Humain, indique la colonne dans laquelle tu veux placer ton pion (0-11) \n')
             clear()
