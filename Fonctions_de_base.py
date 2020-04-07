@@ -78,7 +78,7 @@ def Terminal_Test(plateau,nb=4):
     empty_box = "." #Symbole de la case vide
     
     #CAS 1 : Visctoire d'un des joueurs
-    #Test Sur les LIGNES && COLONNES
+    #Test Sur les LIGNES && COLONNES && DIAGONALES
     for i in range(nb_Ligne):
         for j in range(nb_Colonne):
             if(state[i,j] != empty_box):
@@ -86,21 +86,19 @@ def Terminal_Test(plateau,nb=4):
                 if(j+ nb <= nb_Colonne and (np.all(state[i, j:j+nb] == 'X') or np.all(state[i, j:j+nb] == 'O'))):
                     #Vérification de ne pas sortir de la matrice
                     #Si toute les valeurs de la liste =='X' or 'O' alors ...
-                    #Slicing : sur la ligne i on prend les éléments de j à j+6 (j+6 exclu) donc 6 éléments
+                    #Slicing : sur la ligne i on prend les éléments de j à j+4 (j+4 exclu) donc 4 éléments
                     return True #end_Game = True et on le renvoie directement pr sortir de la méthode
                
                 #Test sur la colonne 
                 if(i+nb <= nb_Ligne and (np.all(state[i:i+nb ,j] == 'X') or np.all(state[i:i+nb ,j] == 'O'))):
                     return True #end_Game = True
                 
-                #Test sur la Diagonale
-                #and i-nb >= 0 
+                #Diagonale descendante vers la droite
                 if(i+nb <= nb_Ligne and j+nb <= nb_Colonne): #On crée un carré de dimension i+nb x j+nb (ici 4x4)                 
                     #On ne regarde qu'à droite de la case car les diagonales sur la gauches seront testées à un autre moment avec leur somment donc en analysant vers la droite
                     cpt = 1 #Compteur du nombre de cases identiques : La PREMIERE case est déjà comptabilisée
                     add = 1 #Variation de la ligne t de la colonne
                     end_Game=True
-                    #Diagonale descendante vers la droite
                     while(cpt < nb and end_Game==True):
                         if(state[i+add, j+add] != state[i,j]): #Une case sur la diago est != de la case d'origine => On arrete
                             end_Game = False
@@ -110,7 +108,7 @@ def Terminal_Test(plateau,nb=4):
                             add+=1
                     if(cpt==nb):
                         return True #Un joueur a gagné
-                    #On teste l'autre diagonale car pas de victoire
+                #Diagonale montante vers la droite
                 if(i-nb >= 0 and j+nb <= nb_Colonne):
                     cpt= 1 #La PREMIERE case est déjà comptabilisée
                     add = 1
