@@ -10,7 +10,7 @@ mais ici on va élaguer des options afin de gagner en rapidité d'exécution (re
 def Alpha_Beta(state,joueur):
     if(joueur == 'X') : opposant = 'O'
     if(joueur == 'O') : opposant = 'X'
-    resultat = Max_Value_Alpha_Beta(state,joueur,opposant,-2,2,True)
+    resultat = Max_Value_Alpha_Beta(state,joueur,opposant,-100,100,0,4)
     return resultat
 
 
@@ -22,16 +22,19 @@ Reflexion pour le tour de l'opposant, qui va prendre l'action qui a le gain mini
 @ opposant  Le symbole correspondant à l'adversaire (X/O)
 @ alpha     La valeur max déjà obtenue avec les autres options à cet étage, permet de déterminer quand faire une coupure alpha
 @ beta      La valeur min déjà obtenue avec les autres options à cet étage, permet de déterminer quand faire une coupure beta
+@ prof_max  La profondeur max a laquelle on descend   
+@ prof_act  La profondeur actuelle
 @ return    La valeur de l'utility d'un état
 """
 
-def Min_Value_Alpha_Beta(state,joueur,opposant,alpha,beta):
-    if(Fonctions_de_base.Terminal_Test(state)) : return Fonctions_de_base.Utility(state,joueur)
+def Min_Value_Alpha_Beta(state,joueur,opposant,alpha,beta,prof_act,prof_max):
+    if(Fonctions_de_base.Terminal_Test(state) or prof_act==prof_max) : return Fonctions_de_base.Utility(state,joueur,opposant)
+    prof_act+=1
     #valeur infiniment haute
-    v = 2
+    v = 100
     #Ici ce sont les actions de l'opposant qu'on prend car c'est son tour
-    for a in Fonctions_de_base.Action(state,opposant):
-        v = min(v,Max_Value_Alpha_Beta(Fonctions_de_base.Result(state,a),joueur,opposant,alpha,beta))
+    for a in Fonctions_de_base.Action(state):
+        v = min(v,Max_Value_Alpha_Beta(Fonctions_de_base.Result(state,a,opposant),joueur,opposant,alpha,beta,prof_act,prof_max))
         if (v <= alpha) : return v
         beta = min(beta,v)
     return v
@@ -50,23 +53,24 @@ Reflexion pour le tour du joueur, qui va prendre l'action qui a le gain maximum 
 '''
 
 
-def Max_Value_Alpha_Beta(state,joueur,opposant,alpha,beta, renvoyer_action = False):
-    if(Fonctions_de_base.Terminal_Test(state)) : return Fonctions_de_base.Utility(state,joueur)
+def Max_Value_Alpha_Beta(state,joueur,opposant,alpha,beta, prof_act,prof_max):
+    if(Fonctions_de_base.Terminal_Test(state) or prof_act==prof_max ) : return Fonctions_de_base.Utility(state,joueur,opposant)
+    prof_act+=1
     #valeur infiniment haute
-    v = -2
-    if(renvoyer_action):
+    v = -100
+    if(prof_act==1):
         sauvegarde_action = []
         #Ici ce sont les actions du joueur qu'on prend car c'est son tour
-        for a in Fonctions_de_base.Action(state,joueur):
+        for a in Fonctions_de_base.Action(state):
             ancien_v = v
-            v = max(v,Min_Value_Alpha_Beta(Fonctions_de_base.Result(state,a),joueur,opposant,alpha,beta))
-            if(ancien_v != v): sauvegarde_action=a
+            v = max(v,Min_Value_Alpha_Beta(Fonctions_de_base.Result(state,a,joueur),joueur,opposant,alpha,beta,prof_act,prof_max))
+            if(ancien_v < v): sauvegarde_action=a
             if (v >= beta) : return [v,sauvegarde_action]
             alpha = max(alpha,v)
         return [v,sauvegarde_action]
     #Ici ce sont les actions de l'opposant qu'on prend car c'est son tour
-    for a in Fonctions_de_base.Action(state,joueur):
-        v = max(v,Min_Value_Alpha_Beta(Fonctions_de_base.Result(state,a),joueur,opposant,alpha,beta))
+    for a in Fonctions_de_base.Action(state):
+        v = max(v,Min_Value_Alpha_Beta(Fonctions_de_base.Result(state,a,joueur),joueur,opposant,alpha,beta,prof_act,prof_max))
         if (v >= beta) : return v
         alpha = max(alpha,v)
     return v

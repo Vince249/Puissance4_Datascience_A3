@@ -170,13 +170,13 @@ def Utility_OLD (state, joueur):
 
 '''
 Détermine l'intérêt d'un état
-@ state          Tableau multi-dimensionnel
-@ posi_Player    Le symbole correspondant au joueur voulant gagner (X/O)
-@ nega_Player    Le symbole correspondant au joueur voulant perdre (X/O)
-@ return         Valeur de l'état pour positive_Player
+@ state     Tableau multi-dimensionnel
+@ joueur    Le symbole correspondant au joueur voulant gagner (X/O)
+@ opposant  Le symbole correspondant au joueur voulant perdre (X/O)
+@ return    Valeur de l'état pour positive_Player
 *Inspiration site_Web (fin de la page): https://www.christian-schmidt.fr/puissance4
 '''
-def Utility (state, posi_Player, nega_Player):
+def Utility (state, joueur, opposant):
     mat_Reference = np.array([[3,4,5,7,7,7,7,7,7,5,4,3],
                               [4,6,8,10,10,10,10,10,10,8,6,4],
                               [5,8,11,13,13,13,13,13,13,11,8,5],
@@ -187,9 +187,9 @@ def Utility (state, posi_Player, nega_Player):
     result = 0
     for i in range(state.size_Ligne):
         for j in range(state.size_Colonne):
-            if(state[i,j] == posi_Player):
+            if(state[i,j] == joueur):
                 result += mat_Reference[i,j]
-            elif(state[i,j] == nega_Player):
+            elif(state[i,j] == opposant ):
                 result -= mat_Reference[i,j]
 
     return result
