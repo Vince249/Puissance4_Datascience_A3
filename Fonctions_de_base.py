@@ -167,6 +167,10 @@ Détermine l'intérêt d'un état
 @ opposant  Le symbole correspondant au joueur voulant perdre (X/O)
 @ return    Valeur de l'état pour positive_Player
 *Inspiration site_Web (fin de la page): https://www.christian-schmidt.fr/puissance4
+
+#! Cette heuristique s'appuie sur le nombre de coup gagnant dans lequel chaque position peut être impliquée
+#! Elle fonctionne pour un plateau normal de puissance 4 mais pas pour le nôtre car les dimensions sont trop grandes
+#! Il n'y a pas assez de différence entre les values des différents plays
 '''
 def Utility (state, joueur, opposant):
     mat_Reference = np.array([[3,4,5,7,7,7,7,7,7,5,4,3],
