@@ -2,14 +2,6 @@ import Initialisation
 import numpy as np
 import copy
 
-'''
-Liste les actions possibles à partir d'un état donné
-@ state     Une liste de liste au format [[-,-,-],[-,-,-],[-,-,-]] avec les symboles correspondants
-@ joueur    Le symbole correspondant au joueur (X/O)
-@ return    Une liste de listes au format [[X/O , x , y],...] avec x,y les coordonnées du X/O que l'action ajoute
-
-UNIT TEST FAIT
-'''
 
 '''
 Cette méthode va renvoyer la liste des colonnes dans lesquelles on peut encore jouer.
@@ -191,40 +183,4 @@ def Utility (state, joueur, opposant):
                 result += mat_Reference[i,j]
             elif(state[i,j] == opposant ):
                 result -= mat_Reference[i,j]
-
     return result
-
-
-#! Test unitaire pour vérifier le fonctionnement des méthodes
-if __name__ == '__main__':
-    
-    mat = Initialisation.Plateau()
-    #print(mat)    
-
-    '''
-    #TEST de Result()
-    mat = Result(mat,5,'X')#Affecte la valeur 'O' à la colonne d'index 5 (6e colonne)
-    mat = Result(mat,0,'O')
-    for i in range(2):
-        mat = Result(mat,4,'O')
-        mat = Result(mat,4,'X')
-    mat = Result(mat,4,'X')    
-    print(mat)
-    print(Action(mat))#Renvoie [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11] car à ce moment là il rest 1 case dans la colonne 4
-    mat = Result(mat,4,'O')
-
-    #! Tout s'empile bien, si on retire le # de la ligne suivante on essaie de mettre un X alors que la colonne est pleine
-    #! Un message d'erreur apparaîtra
-    #mat = Result(mat,4,'X') 
-    print(mat)
-    print(Action(mat))#Renvoie [0, 1, 2, 3, 5, 6, 7, 8, 9, 10, 11] car à ce moment là, colonne 4 pleine
-    '''
-
-    #TEST de Utility()
-    for i in range(2):
-        mat = Result(mat,4,'O')
-        mat = Result(mat,4,'X')
-    mat = Result(mat,4,'X')    
-    print(mat)
-    val = Utility(mat, 'X', 'O')
-    print("Valeur de l'Utility = ", val)
