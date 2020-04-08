@@ -10,7 +10,8 @@ mais ici on va élaguer des options afin de gagner en rapidité d'exécution (re
 def Alpha_Beta(state,joueur):
     if(joueur == 'X') : opposant = 'O'
     if(joueur == 'O') : opposant = 'X'
-    resultat = Max_Value_Alpha_Beta(state,joueur,opposant,-100,100,0,4)
+    max_Depth = 4 #Profondeur maximale
+    resultat = Max_Value_Alpha_Beta(state,joueur,opposant, -1000, 1000, 0, max_Depth)
     return resultat
 
 

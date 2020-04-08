@@ -32,7 +32,8 @@ def Result(state,action,joueur):
     #! On utilise une deepcopy
     *Si on modifie la matrice y alors x n'est pas modifiée
     '''
-    result = copy.deepcopy(state) #Copie de state en deepcopy donc changement de result ne change pas state
+    result = Initialisation.Plateau()
+    result.myMat = copy.deepcopy(state.myMat) #Copie de state en deepcopy donc changement de result ne change pas state
     #Result est un tableau multi-dimensionnel donc utiliser la librairie numpy
     #! Méthode de gravité qui renvoie x : valeur de la ligne
     
@@ -69,7 +70,7 @@ def Terminal_Test(plateau,nb=4):
     end_Game = False 
     empty_box = "." #Symbole de la case vide
     
-    #CAS 1 : Visctoire d'un des joueurs
+    #CAS 1 : Victoire d'un des joueurs
     #Test Sur les LIGNES && COLONNES && DIAGONALES
     for i in range(nb_Ligne):
         for j in range(nb_Colonne):
@@ -114,7 +115,7 @@ def Terminal_Test(plateau,nb=4):
                             cpt+=1
                             add+=1
                     if(cpt==nb):
-                        return True #Un joueur a gagné                        
+                        return True #Un joueur a gagné
 
     #CAS 2 : Jeu plein
     end_Game = True
@@ -173,12 +174,21 @@ Détermine l'intérêt d'un état
 #! Il n'y a pas assez de différence entre les values des différents plays
 '''
 def Utility (state, joueur, opposant):
+    '''
     mat_Reference = np.array([[3,4,5,7,7,7,7,7,7,5,4,3],
                               [4,6,8,10,10,10,10,10,10,8,6,4],
                               [5,8,11,13,13,13,13,13,13,11,8,5],
                               [5,8,11,13,13,13,13,13,13,11,8,5],
                               [4,6,8,10,10,10,10,10,10,8,6,4],
                               [3,4,5,7,7,7,7,7,7,5,4,3]])
+    '''
+    
+    mat_Reference = np.array([[3,4,5,7,8,10,10,8,7,5,4,3],
+                            [4,6,8,10,11,12,12,11,10,8,6,4],
+                            [5,8,11,13,14,16,16,14,13,11,8,5],
+                            [5,8,11,13,14,16,16,14,13,11,8,5],
+                            [4,6,8,10,11,12,12,11,10,8,6,4],
+                            [3,4,5,7,8,10,10,8,7,5,4,3]])
 
     result = 0
     for i in range(state.size_Ligne):
@@ -187,4 +197,86 @@ def Utility (state, joueur, opposant):
                 result += mat_Reference[i,j]
             elif(state[i,j] == opposant ):
                 result -= mat_Reference[i,j]
+
+
+    ''' Ajout de BONUS :
+    * Defaite : -50
+    * Victoire : +50
+    '''
+    nb_Ligne, nb_Colonne = np.shape(state.myMat) #Récupère les dimensions de la matrice avec numpy
+    end_Game = False 
+    empty_box = "." #Symbole de la case vide
+    nb= 4 #Nombre de case necessaire a une victoire
+    bonus_Win = 50
+    bonus_Lose = -50
+    
+    #CAS : Victoire d'un des joueurs
+    #Test Sur les LIGNES && COLONNES && DIAGONALES
+    for i in range(nb_Ligne):
+        for j in range(nb_Colonne):
+            if(state[i,j] != empty_box):
+                #Test sur la ligne
+                if(j+ nb <= nb_Colonne and (np.all(state[i, j:j+nb] == 'X') or np.all(state[i, j:j+nb] == 'O'))):
+                    #On est dans un cas de victoire
+                    if(state[i,j] == joueur):
+                        result += bonus_Win
+                    if(state[i,j] == opposant):
+                        result += bonus_Lose    
+                    end_Game = True                
+                    break
+               
+                #Test sur la colonne 
+                if(i+nb <= nb_Ligne and (np.all(state[i:i+nb ,j] == 'X') or np.all(state[i:i+nb ,j] == 'O'))):
+                    #On est dans un cas de victoire
+                    if(state[i,j] == joueur):
+                        result += bonus_Win
+                    if(state[i,j] == opposant):
+                        result += bonus_Lose
+                    end_Game = True
+                    break
+                
+                #Diagonale descendante vers la droite
+                if(i+nb <= nb_Ligne and j+nb <= nb_Colonne): #On crée un carré de dimension i+nb x j+nb (ici 4x4)                 
+                    #On ne regarde qu'à droite de la case car les diagonales sur la gauches seront testées à un autre moment avec leur somment donc en analysant vers la droite
+                    cpt = 1 #Compteur du nombre de cases identiques : La PREMIERE case est déjà comptabilisée
+                    add = 1 #Variation de la ligne t de la colonne
+                    end_Game=True
+                    while(cpt < nb and end_Game==True):
+                        if(state[i+add, j+add] != state[i,j]): #Une case sur la diago est != de la case d'origine => On arrete
+                            end_Game = False
+                            break
+                        else:
+                            cpt+=1
+                            add+=1
+                    if(cpt==nb):
+                        #On est dans un cas de victoire
+                        if(state[i,j] == joueur):
+                            result += bonus_Win
+                        if(state[i,j] == opposant):
+                            result += bonus_Lose
+                        end_Game = True
+                        break
+                #Diagonale montante vers la droite
+                if(i-nb >= 0 and j+nb <= nb_Colonne):
+                    cpt= 1 #La PREMIERE case est déjà comptabilisée
+                    add = 1
+                    end_Game = True 
+                    #Diagonale montante vers la droite
+                    while(cpt < nb and end_Game==True):
+                        if(state[i-add, j+add] != state[i,j]): #Une case sur la diago est != de la case d'origine => On arrete
+                            end_Game = False
+                            break
+                        else:
+                            cpt+=1
+                            add+=1
+                    if(cpt==nb):
+                        #On est dans un cas de victoire
+                        if(state[i,j] == joueur):
+                            result += bonus_Win
+                        if(state[i,j] == opposant):
+                            result += bonus_Lose
+                        end_Game = True
+                        break                        
+
+    
     return result
