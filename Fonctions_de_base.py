@@ -123,44 +123,6 @@ def Terminal_Test(plateau,nb=4):
         end_Game = False #Au moins une case est vide donc la matrice n'est pas pleine
     return end_Game
 
-
-'''
-Détermine l'intérêt d'un état
-@ state     Une liste de liste au format [[-,-,-],[-,-,-],[-,-,-]] avec les symboles correspondants
-@ joueur    Le symbole correspondant au joueur (X/O)
-@ return    +1 pour une victoire, 0 pour une défaite, -1 pour une défaite
-
-UNIT TEST FAIT
-'''
-def Utility_OLD (state, joueur):
-    #ligne
-    result = 0
-    for element in state :
-        if(element[0]==element[1] and element[2]==element[1]):
-            if(element[0] == joueur):
-                result = 1
-            else:
-                result = -1
-    #colonne
-    for i in range (len(state)):
-        listetemp = []
-        for j in range (len(state)):
-            listetemp.append(state[j][i])
-        if(listetemp[0]==listetemp[1] and listetemp[2]==listetemp[1]):
-            if(listetemp[0] == joueur):
-                result = 1
-            else:
-                result = -1
-    #diagonale
-
-    if((state[0][0] == state[1][1] and state[2][2] == state[1][1] ) or (state[1][1] == state[2][0] and state[2][0] == state[0][2])):
-        if(state[1][1] == joueur):
-            result = 1
-        else:
-            result = -1
-
-    return result
-
 '''
 Détermine l'intérêt d'un état
 @ state     Tableau multi-dimensionnel
@@ -173,7 +135,8 @@ Détermine l'intérêt d'un état
 #! Elle fonctionne pour un plateau normal de puissance 4 mais pas pour le nôtre car les dimensions sont trop grandes
 #! Il n'y a pas assez de différence entre les values des différents plays
 '''
-def Utility (state, joueur, opposant):
+def Utility_Armand (state, joueur, opposant):
+
     '''
     mat_Reference = np.array([[3,4,5,7,7,7,7,7,7,5,4,3],
                               [4,6,8,10,10,10,10,10,10,8,6,4],
@@ -280,3 +243,25 @@ def Utility (state, joueur, opposant):
 
     
     return result
+
+
+def Combinaisons_potentielle_win(state,joueur,opposant,i,j):
+    
+    liste_combinaison = []
+    #Il y a de la place au dessus
+    if(i>=3):
+        combo_col_up = 0
+        distance = 0
+        for w in range(i-3,i): #On regarde les lignes au dessus
+
+            #* Check colonne
+            if(state[w,j]== joueur): 
+                combo_col_up +=1
+            #Pour colonne on ne regarde pas la distance de construction car elle va se remplir seule
+            if(state[w,j]==opposant): 
+                combo_col_up = -100 #Impossible de faire une combinaison ici
+
+            #* Check diagonale droite
+            
+            
+
