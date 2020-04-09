@@ -12,8 +12,8 @@ mais ici on va élaguer des options afin de gagner en rapidité d'exécution (re
 def Alpha_Beta(state,joueur):
     if(joueur == 'X') : opposant = 'O'
     if(joueur == 'O') : opposant = 'X'
-    max_Depth = 6 #Profondeur maximale
-    resultat = Max_Value_Alpha_Beta(state,joueur,opposant, -1000, 1000, 0, max_Depth)
+    max_Depth = 4 #Profondeur maximale
+    resultat = Max_Value_Alpha_Beta(state,joueur,opposant, -10000000000, 10000000000, 0, max_Depth)
     return resultat
 
 
@@ -31,10 +31,10 @@ Reflexion pour le tour de l'opposant, qui va prendre l'action qui a le gain mini
 """
 
 def Min_Value_Alpha_Beta(state,joueur,opposant,alpha,beta,prof_act,prof_max):
-    if(Fonctions_de_base.Terminal_Test(state) or prof_act==prof_max) : return Fonctions_de_base.Utility_Armand(state,joueur,opposant)
+    if(Fonctions_de_base.Terminal_Test(state) or prof_act==prof_max) : return Fonctions_de_base.Utility_Vincent_Remi(state,joueur,opposant)
     prof_act+=1
     #valeur infiniment haute
-    v = 100
+    v = 10000000000
     #Ici ce sont les actions de l'opposant qu'on prend car c'est son tour
 
     #! Diminution de l'amplitude de l'arbre
@@ -42,7 +42,7 @@ def Min_Value_Alpha_Beta(state,joueur,opposant,alpha,beta,prof_act,prof_max):
     liste_value=[]
     liste_action = []
     for a in Fonctions_de_base.Action(state):
-        value = Fonctions_de_base.Utility_Armand(Fonctions_de_base.Result(state,a,opposant), joueur, opposant)
+        value = Fonctions_de_base.Utility_Vincent_Remi(Fonctions_de_base.Result(state,a,opposant), joueur, opposant)
         liste_value.append(value)
         liste_action.append(a)
 
@@ -80,10 +80,10 @@ Reflexion pour le tour du joueur, qui va prendre l'action qui a le gain maximum 
 
 
 def Max_Value_Alpha_Beta(state,joueur,opposant,alpha,beta, prof_act,prof_max):
-    if(Fonctions_de_base.Terminal_Test(state) or prof_act==prof_max ) : return Fonctions_de_base.Utility_Armand(state,joueur,opposant)
+    if(Fonctions_de_base.Terminal_Test(state) or prof_act==prof_max ) : return Fonctions_de_base.Utility_Vincent_Remi(state,joueur,opposant)
     prof_act+=1
-    #valeur infiniment haute
-    v = -100
+    #valeur infiniment basse
+    v = -1000000000000
     if(prof_act==1):
         sauvegarde_action = []
         #Ici ce sont les actions du joueur qu'on prend car c'est son tour
@@ -93,7 +93,7 @@ def Max_Value_Alpha_Beta(state,joueur,opposant,alpha,beta, prof_act,prof_max):
         liste_value=[]
         liste_action = []
         for a in Fonctions_de_base.Action(state):
-            value = Fonctions_de_base.Utility_Armand(Fonctions_de_base.Result(state,a,joueur), joueur, opposant)
+            value = Fonctions_de_base.Utility_Vincent_Remi(Fonctions_de_base.Result(state,a,joueur), joueur, opposant)
             liste_value.append(value)
             liste_action.append(a)
 
@@ -123,7 +123,7 @@ def Max_Value_Alpha_Beta(state,joueur,opposant,alpha,beta, prof_act,prof_max):
     liste_value=[]
     liste_action = []
     for a in Fonctions_de_base.Action(state):
-        value = Fonctions_de_base.Utility_Armand(Fonctions_de_base.Result(state,a,joueur), joueur, opposant)
+        value = Fonctions_de_base.Utility_Vincent_Remi(Fonctions_de_base.Result(state,a,joueur), joueur, opposant)
         liste_value.append(value)
         liste_action.append(a)
 

@@ -247,21 +247,107 @@ def Utility_Armand (state, joueur, opposant):
 
 def Combinaisons_potentielle_win(state,joueur,opposant,i,j):
     
-    liste_combinaison = []
-    #Il y a de la place au dessus
-    if(i>=3):
-        combo_col_up = 0
-        distance = 0
-        for w in range(i-3,i): #On regarde les lignes au dessus
+    result = 0
+    dico = {
+        0 : [], #pos_column_up
+        1 : [], #'val_column_up'
 
-            #* Check colonne
-            if(state[w,j]== joueur): 
-                combo_col_up +=1
-            #Pour colonne on ne regarde pas la distance de construction car elle va se remplir seule
-            if(state[w,j]==opposant): 
-                combo_col_up = -100 #Impossible de faire une combinaison ici
+        2 : [], #'pos_diag_up_right'
+        3 : [], #'val_diag_up_right'
 
-            #* Check diagonale droite
+        4 : [], #'pos_side_right'
+        5 : [], #'val_side_right'
+
+        6 : [], #'pos_diag_bot_right'
+        7 : [], #'val_diag_bot_right'
+
+        8 : [], #'pos_diag_bot_left'
+        9 : [],#'val_diag_bot_left'
+
+        10 : [], #'pos_side_left'
+        11 : [], #'val_side_left'
+
+        12 : [], #'pos_diag_up_left'
+        13 : [], #'val_diag_up_left'
+        
+        
+        # 'val_column_bot' : [], inutile car on ne peut pas gagner en mettant des pions en bas
+        # 'pos_column_bot' : [], inutile car on ne peut pas gagner en mettant des pions en bas
+        
+    }
+    
+
+
+    for w in range(0,4): #On regarde les lignes au dessus
+
+        if(i>=3): # Place en haut
+            #* colonne up
+            dico[1].append(state[i-w,j])
+            dico[0].append([i-w,j])
+
+            
+            #* Check diagonale gauche haut
+            if(j>=3): # Place à gauche
+                dico[13].append(state[i-w,j-w])
+                dico[12].append([i-w,j-w])
+
+
+            #* Check diagonale droit haut
+            if(j<=8): # Place à droite
+                dico[3].append(state[i-w,j+w])
+                dico[2].append([i-w,j+w])
+        
+        
+
+        if(j>=3): # Place à gauche
+            #* side left
+            dico[11].append(state[i,j-w])
+            dico[10].append([i,j-w])
+
+            
+            #* Check diagonale gauche bas
+            if(i<=2): # Place en bas
+                dico[9].append(state[i+w,j-w])
+                dico[8].append([i+w,j-w])
+
+        if(j<=8): # Place à droite
+            #* side right
+            dico[5].append(state[i,j+w])
+            dico[4].append([i,j+w])
+
+            
+            #* Check diagonale droite bas
+            if(i<=2): # Place en bas
+                dico[7].append(state[i+w,j+w])
+                dico[6].append([i+w,j+w])
+
+    for y in range(0,13,2):
+        if(opposant not in dico[y+1] and len(dico[y+1]) != 0 ): #Si l'adversaire n'est pas présent
+            compteur = dico[y+1].count(joueur)
+            distance = 0
+            for i in range(4) :
+                if(dico[y+1][i]=='.' and y != 0): #on regarde pas la distance pour la colonne
+                    distance += Gravity(state,dico[y][i][1])- dico[y][i][0]
+
+            result += (compteur**2)/(distance+1) 
+            if(compteur ==4): result += 10000
+    
+    return result
+
+
+def Utility_Vincent_Remi(state,joueur,opposant):
+
+    result = 0
+    for i in range(state.size_Ligne):
+        for j in range(state.size_Colonne):
+            if(state[i,j] == joueur):
+                result += Combinaisons_potentielle_win (state,joueur,opposant,i,j)
+            elif(state[i,j] == opposant ):
+                result -= Combinaisons_potentielle_win (state,opposant,joueur,i,j)
+
+    return result
+
+
             
             
 

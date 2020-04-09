@@ -79,18 +79,18 @@ if __name__ == '__main__':
             check_partie_fini = Fonctions_de_base.Terminal_Test(plateau)
             if(check_partie_fini) : break
 
-        #! L'IA détermine son play ici (pour l'instant c'est un autre humain qui joue)
+        #! L'IA détermine son play ici
         print(plateau)
         list_Actions = Fonctions_de_base.Action(plateau) #On recupere toutes les actions possibles
         print("Action(s) possible(s) pour l'IA : ", list_Actions)
 
-        #Methode MiniMax pour determiner le meilleur coups
-        #action = MiniMax.MiniMax_Decision(plateau, ia)
 
-        #Methode AlphaBeta
         action=AlphaBetaMiniMax.Alpha_Beta(plateau,ia)
+        
         #action contient la value et l'action associée
         clear()
+        print("L'IA joue : "+ str(action[1]))
+        print()
         plateau = Fonctions_de_base.Result(plateau,action[1],ia)
         #!Si la partie est finie, l'humain ne joue pas
         check_partie_fini = Fonctions_de_base.Terminal_Test(plateau)
