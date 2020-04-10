@@ -1,7 +1,6 @@
 import AlphaBetaMiniMax
 import Fonctions_de_base
 import Initialisation
-import MiniMax
 import time
 from shutil import get_terminal_size #pour fonction clear
 import random #Pour choisir les textes à afficher
