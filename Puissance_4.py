@@ -3,6 +3,7 @@ import Fonctions_de_base
 import Initialisation
 import time
 from shutil import get_terminal_size #pour fonction clear
+import random #Pour choisir les textes à afficher
 
 '''
 fonction clear -> #? pratique car ça nous laisse la possibilité de voir l'historique des coups joués
@@ -26,10 +27,33 @@ def Selection_colonne(phrase):
             print("Erreur : type de l'input")
     return action
 
+#Partie du Lore car c'est inutile mais absolument indispensable
+'''Lore pour introduire le jeu
+'''
+def Intro():
+    print("Bienvenue à toi Champion !",
+    "\nSache que toute entrevue avec Athéna nécessite un Test.",
+    "\nProuve nous ton sens de la stratégie et fais honneur à notre Déesse !",
+    "\n\nTu devras affronter notre champion !!!"
+    "\n\nCelui-là même qui sera créé par ton espèce dans un futur lointain !",
+    "\nSi tu l'emportes face à Skynet, Athéna t'écoutera !\n\n")
+'''
+Reactions utilisées à chaque coups de l'adversaire
+'''
+def Reaction():
+    a = "Voilà un coup intéressant ! \nMais il en faudra plus pour me surprendre !"
+    b = "N'oublie pas ! La vitesse est une chose mais la précipitation en est une autre."
+    c = "Cela faisait plus d'un siècle que je ne m'étais pas amusé de la sorte !\nContinue de me divertir !"
+    d = "Hmmmm\nJe ne distingue plus ton futur ..."
+    e = "Le fin joueur ne joue pas la carte qu'attend son adversaire, encore moins celle qu'il désire"
+    f = "Connaître exactement le jeu de ses adversaires, c'est leur avoir déjà à moitié gagné la partie."
+    return (random.choice([a,b,c,d,e,f]))#Sélection aléatoire d'une citation
+
 
 if __name__ == '__main__': 
     #! Début du code
     clear()
+    Intro()
     print('Début de la nouvelle partie !')
 
     #Choix symbole
@@ -53,11 +77,12 @@ if __name__ == '__main__':
     plateau = Initialisation.Plateau()
     check_partie_fini = False
     while(not check_partie_fini):
-        
+
         if(first == humain): #Si l'humain joue en premier
             print(plateau)
             list_Actions = Fonctions_de_base.Action(plateau) #On recupere toutes les actions possibles
             print("Action(s) possible(s) : ", list_Actions)
+            print("\n" + Reaction())#Pour rendre le jeu plus vivant
             action = ""
             action_Autorise = False #Verification que ce coup est autorise
             while(action_Autorise == False): 
@@ -71,10 +96,10 @@ if __name__ == '__main__':
             if(check_partie_fini) : break
 
         #! L'IA détermine son play ici
+        print()
         print(plateau)
         list_Actions = Fonctions_de_base.Action(plateau) #On recupere toutes les actions possibles
-        print("Action(s) possible(s) pour l'IA : ", list_Actions)
-
+        print("Action(s) possible(s) pour l'IA : ", list_Actions)        
 
         action=AlphaBetaMiniMax.Alpha_Beta(plateau,ia)
         
@@ -89,7 +114,15 @@ if __name__ == '__main__':
 
         if(first == ia): #Si l'IA joue en premier maintenant c'est le tour de l'Humain
             print(plateau)
-            action = Selection_colonne('Humain, indique la colonne dans laquelle tu veux placer ton pion (0-11) \n')
+            list_Actions = Fonctions_de_base.Action(plateau) #On recupere toutes les actions possibles
+            print("Action(s) possible(s) : ", list_Actions)
+            print("\n" + Reaction())#Pour rendre le jeu plus vivant
+            action = ""
+            action_Autorise = False #Verification que ce coup est autorise
+            while(action_Autorise == False): 
+                action = Selection_colonne('\nHumain, indique la colonne dans laquelle tu veux placer ton pion (0-11) \n')
+                if(action in list_Actions):
+                    action_Autorise = True
             clear()
             plateau = Fonctions_de_base.Result(plateau,action,humain)
             #!Si la partie est finie, l'IA ne joue pas
@@ -97,7 +130,15 @@ if __name__ == '__main__':
             if(check_partie_fini) : break
 
     print(plateau)
-    print('La partie est terminée, bien joué à vous deux !')
+    print('La partie est terminée, bien joué à vous deux !\n\n')
+    winner = Fonctions_de_base.Win_Lose(plateau, ia, humain)
+    if(winner == ia):
+        print("Malheureusement c'en est fini de ce petit jeu !!!\nTu n'es pas digne de rencontrer ma Déesse !")
+    elif(winner == humain):
+        print("CHAMPION ! Tu as mon plus grand respect !!!\nAprès ton entrevue avec Athéna tu prendras ma place !",
+            "\n\nMille mercis ! Je peux enfin prendre des vacances !")
+    else:
+        print("Ce combat fut des plus rudes !\nVa brave guerrier ! Nous croiserons de nouveau nos pions !")
 
 
 

@@ -348,6 +348,88 @@ def Utility_Vincent_Remi(state,joueur,opposant):
     return result
 
 
-            
+def Win_Lose(state, joueur, opposant):
+    nb_Ligne, nb_Colonne = np.shape(state.myMat) #Récupère les dimensions de la matrice avec numpy
+    end_Game = False 
+    empty_box = "." #Symbole de la case vide
+    nb= 4 #Nombre de case necessaire a une victoire
+    winner = empty_box
+    
+    #CAS : Victoire d'un des joueurs
+    #Test Sur les LIGNES && COLONNES && DIAGONALES
+    for i in range(nb_Ligne):
+        if(end_Game == True):
+            break
+        for j in range(nb_Colonne):
+            if(end_Game == True):
+                break
+            if(state[i,j] != empty_box):
+                #Test sur la ligne
+                if(j+ nb <= nb_Colonne and (np.all(state[i, j:j+nb] == 'X') or np.all(state[i, j:j+nb] == 'O'))):
+                    #On est dans un cas de victoire
+                    if(state[i,j] == joueur):
+                        winner = joueur
+                    if(state[i,j] == opposant):
+                        winner = opposant    
+                    end_Game = True                
+                    break
+               
+                #Test sur la colonne 
+                if(i+nb <= nb_Ligne and (np.all(state[i:i+nb ,j] == 'X') or np.all(state[i:i+nb ,j] == 'O'))):
+                    #On est dans un cas de victoire
+                    if(state[i,j] == joueur):
+                        winner = joueur
+                    if(state[i,j] == opposant):
+                        winner = opposant
+                    end_Game = True
+                    break
+                
+                #Diagonale descendante vers la droite
+                if(i+nb <= nb_Ligne and j+nb <= nb_Colonne): #On crée un carré de dimension i+nb x j+nb (ici 4x4)                 
+                    #On ne regarde qu'à droite de la case car les diagonales sur la gauches seront testées à un autre moment avec leur somment donc en analysant vers la droite
+                    cpt = 1 #Compteur du nombre de cases identiques : La PREMIERE case est déjà comptabilisée
+                    add = 1 #Variation de la ligne t de la colonne
+                    end_Game=True
+                    while(cpt < nb and end_Game==True):
+                        if(state[i+add, j+add] != state[i,j]): #Une case sur la diago est != de la case d'origine => On arrete
+                            end_Game = False
+                            break
+                        else:
+                            cpt+=1
+                            add+=1
+                    if(cpt==nb):
+                        #On est dans un cas de victoire
+                        if(state[i,j] == joueur):
+                            winner = joueur
+                        if(state[i,j] == opposant):
+                            winner = opposant
+                        end_Game = True
+                        break
+                #Diagonale montante vers la droite
+                if(i-nb >= 0 and j+nb <= nb_Colonne):
+                    cpt= 1 #La PREMIERE case est déjà comptabilisée
+                    add = 1
+                    end_Game = True 
+                    #Diagonale montante vers la droite
+                    while(cpt < nb and end_Game==True):
+                        if(state[i-add, j+add] != state[i,j]): #Une case sur la diago est != de la case d'origine => On arrete
+                            end_Game = False
+                            break
+                        else:
+                            cpt+=1
+                            add+=1
+                    if(cpt==nb):
+                        #On est dans un cas de victoire
+                        if(state[i,j] == joueur):
+                            winner = joueur
+                        if(state[i,j] == opposant):
+                            winner = opposant
+                        end_Game = True
+                        break            
+
+    #CAS 2 : Jeu plein
+    #Si egalite alors winner n'a jamais ete chnage et est tjrs == empty_box
+
+    return winner
             
 
