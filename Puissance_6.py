@@ -3,22 +3,14 @@ import Fonctions_de_base
 import Initialisation
 import MiniMax
 import time
-from os import system, name #pour fonction clear_bis
 from shutil import get_terminal_size #pour fonction clear
 
 '''
-fonction clear -> #? Sur MAC la fonction clear2 me fait de la merde, celle-ci semble mieux, elle fait juste plein de sauts à la ligne
-                  #? (ça nous laisse la possibilité de voir l'historique des commandes aussi)
+fonction clear -> #? pratique car ça nous laisse la possibilité de voir l'historique des coups joués
 '''
 def clear():
     print("\n" * get_terminal_size().lines, end='')
 
-'''
-fonction clear --> #? Cette fonction me fait un affichage degueu, à vous de me dire ce que ça donne sur Windows mais perso j'aime pas
-'''
-def clear_bis(): 
-    if name == 'nt': _ = system('cls') #for windows 
-    else: _ = system('clear') #for mac and linux
 
 '''
 fonction pour définir la valeur d'action --> évite les erreurs de types ou valeur impossible
