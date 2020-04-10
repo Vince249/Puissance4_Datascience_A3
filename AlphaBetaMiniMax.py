@@ -1,6 +1,7 @@
 import Fonctions_de_base
 
 pourcentage_amplitude = 0.6
+max_Depth = 4 #Profondeur maximale
 ''' 
 Renvoie le meilleur play à faire suivant le state donné en considérant que l'adversaire va faire les plays optimum
 mais ici on va élaguer des options afin de gagner en rapidité d'exécution (remplacerai fonction MiniMax)
@@ -12,7 +13,6 @@ mais ici on va élaguer des options afin de gagner en rapidité d'exécution (re
 def Alpha_Beta(state,joueur):
     if(joueur == 'X') : opposant = 'O'
     if(joueur == 'O') : opposant = 'X'
-    max_Depth = 4 #Profondeur maximale
     resultat = Max_Value_Alpha_Beta(state,joueur,opposant, -10000000000, 10000000000, 0, max_Depth)
     return resultat
 
