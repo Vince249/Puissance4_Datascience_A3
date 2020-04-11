@@ -3,6 +3,11 @@ import Initialisation
 import time
 from shutil import get_terminal_size #pour fonction clear
 
+import time
+
+montemps=time.time()
+
+y=time.time()-montemps
 
 #!Section copiée/Collée de AlphaBetaMiniMax
 
@@ -185,14 +190,12 @@ def Selection_colonne(phrase):
 if __name__ == '__main__': 
     #! PARAMETRISATION
     humain_prof_max = 4
-    ia_prof_max = 5
+    ia_prof_max = 6
     humain_pourcentage = 0.4
     ia_pourcentage = 0.45
 
-
     win_IA = 0
     win_Humain = 0
-    total_Parties = 0
 
     #Choix symbole
     humain = 'X' #! IA qui COMMENCE
@@ -201,70 +204,79 @@ if __name__ == '__main__':
     #Choix commencement
     first = 'X'
 
-    for match in range(5):    
-        #! Début du code
-        print('Début de la nouvelle partie !')
+    #Calcul trop long : disqualification
+    discalifie = ""
+    temps_Max_Calcul = 8
+   
+    #! Début du code
+    print('Début de la nouvelle partie !')
 
-        plateau = Initialisation.Plateau()
-        check_partie_fini = False
-        while(not check_partie_fini):
+    plateau = Initialisation.Plateau()
+    check_partie_fini = False
+    while(not check_partie_fini):
 
-            if(first == humain): #Si l'humain joue en premier
-
-                action = Alpha_Beta(plateau, humain, humain_prof_max, humain_pourcentage)
-
-                plateau = Fonctions_de_base.Result(plateau,action[1],humain)        
-                #!Si la partie est finie, l'IA ne joue pas
-                check_partie_fini = Fonctions_de_base.Terminal_Test(plateau)
-                if(check_partie_fini) : break
-
-            #! L'IA détermine son play ici
-
-            action=Alpha_Beta(plateau,ia, ia_prof_max, ia_pourcentage)
+        if(first == humain): #Si l'humain joue en premier
             
-            #action contient la value et l'action associée
+            montemps=time.time() #Temps de reference pr le chronometre en seconde
+            #number of seconds passed since epoch (January 1, 1970, 00:00:00 at UTC = the point where time begins)
+            action = Alpha_Beta(plateau, humain, humain_prof_max, humain_pourcentage)
+            nv_Temps = time.time()
+            if(nv_Temps - montemps >= temps_Max_Calcul):
+                discalifie = humain
+                break
 
-            plateau = Fonctions_de_base.Result(plateau,action[1],ia)
-            #!Si la partie est finie, l'humain ne joue pas
+            plateau = Fonctions_de_base.Result(plateau,action[1],humain)        
+            #!Si la partie est finie, l'IA ne joue pas
             check_partie_fini = Fonctions_de_base.Terminal_Test(plateau)
             if(check_partie_fini) : break
 
-            if(first == ia): #Si l'IA joue en premier maintenant c'est le tour de l'Humain
-                action = Alpha_Beta(plateau, humain, humain_prof_max, humain_pourcentage)
-                
-                plateau = Fonctions_de_base.Result(plateau,action[1],humain)
-                #!Si la partie est finie, l'IA ne joue pas
-                check_partie_fini = Fonctions_de_base.Terminal_Test(plateau)
-                if(check_partie_fini) : break
-
-        print(plateau)
-        print('La partie est terminée, bien joué à vous deux !')
-        winner = Fonctions_de_base.Win_Lose(plateau, ia, humain)
-        if(winner == ia):            
-            win_IA += 1
-            total_Parties += 1
-            print("IA gagne la partie ", total_Parties)
-        elif(winner == humain):
-            win_Humain += 1
-            total_Parties += 1
-            print("HUMAIN gagne la partie ", total_Parties)
-        else:
-            total_Parties += 1
-            print("EGALITE entre IA et Humain à la partie ", total_Parties)
-        print("\n")
-
-        #Si une IA surpasse l'autre de 10 victoires
-        if(abs(win_IA - win_Humain) >= 10):
-            if(win_IA > win_Humain) :
-                win_IA = 25
-                win_Humain = 0
-            else:
-                win_IA = 0
-                win_Humain = 25
-
+        #! L'IA détermine son play ici
+        montemps=time.time()
+        action=Alpha_Beta(plateau,ia, ia_prof_max, ia_pourcentage)
+        nv_Temps = time.time()
+        if(nv_Temps - montemps >= temps_Max_Calcul):
+            discalifie = ia
             break
+        
+        #action contient la value et l'action associée
+
+        plateau = Fonctions_de_base.Result(plateau,action[1],ia)
+        #!Si la partie est finie, l'humain ne joue pas
+        check_partie_fini = Fonctions_de_base.Terminal_Test(plateau)
+        if(check_partie_fini) : break
+
+        if(first == ia): #Si l'IA joue en premier maintenant c'est le tour de l'Humain
+            montemps=time.time()
+            action = Alpha_Beta(plateau, humain, humain_prof_max, humain_pourcentage)
+            if(nv_Temps - montemps >= temps_Max_Calcul):
+                discalifie = humain
+                break
+            
+            plateau = Fonctions_de_base.Result(plateau,action[1],humain)
+            #!Si la partie est finie, l'IA ne joue pas
+            check_partie_fini = Fonctions_de_base.Terminal_Test(plateau)
+            if(check_partie_fini) : break
+
+    print(plateau)
+    print('La partie est terminée, bien joué à vous deux !')
+    winner = Fonctions_de_base.Win_Lose(plateau, ia, humain)
+    if(winner == ia or discalifie == humain):            
+        win_IA += 1
+        print("IA gagne la partie ")
+        if(discalifie == humain):
+            discalifie = "*"
+            print("DISCALIFICATION de Humain car trop lent (Temps max = %d sec)" %temps_Max_Calcul)
+    elif(winner == humain or discalifie == ia):
+        win_Humain += 1
+        print("HUMAIN gagne la partie ")
+        if(discalifie == ia):
+            discalifie = "*"
+            print("DISCALIFIACTION de IA car trop lent (Temps max = %d sec)" %temps_Max_Calcul)
+    else:
+        print("EGALITE entre IA et Humain à la partie ")
+    print("\n")
     
-    #Les 25 parties sont finies ou une IA c'est demarquee
+    #La partie est finie ou une IA c'est demarquee
     if(first == humain):
         print("HUMAIN jouait en PREMIER")
     if(first == ia):
@@ -274,14 +286,9 @@ if __name__ == '__main__':
     print("L'IA : HUMAIN de paramètres :",
         "\npoucentage largeur = ", humain_pourcentage,
         "\nprofondeur max = ", humain_prof_max,
-        "\nTotal Victoire = ", win_Humain,
-        "\nPour : Total Partie = ", total_Parties)
+        "\nTotal Victoire = ", win_Humain)
     
-    print("L'IA : IA de paramètres :",
+    print("\nL'IA : IA de paramètres :",
         "\npoucentage largeur = ", ia_pourcentage,
         "\nprofondeur max = ", ia_prof_max,
-        "\nTotal Victoire = ", win_IA,
-        "\nPour : Total Partie = ", total_Parties)
-
-
-
+        "\nTotal Victoire = ", win_IA)
