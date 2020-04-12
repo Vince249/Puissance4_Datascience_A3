@@ -2,7 +2,7 @@ import Initialisation
 import numpy as np
 import copy
 
-nb_jetons_max = 10
+nb_jetons_max = 42 #Nombre maximum de jeton sur le plateau (total des 2 joueurs) : pour nb_jetons_max=10 => J1 a 5 jetons et J2 5 autres
 
 '''
 Cette méthode va renvoyer la liste des colonnes dans lesquelles on peut encore jouer.
