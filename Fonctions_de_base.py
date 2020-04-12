@@ -2,6 +2,7 @@ import Initialisation
 import numpy as np
 import copy
 
+nb_jetons_max = 10
 
 '''
 Cette méthode va renvoyer la liste des colonnes dans lesquelles on peut encore jouer.
@@ -61,10 +62,11 @@ def Gravity(state, column):
 '''
 Vérifie si l'état state est terminal
 @ state     Un tableau 2D similaire à une liste de liste mais avec numpy avec les symboles correspondants
+@ nb_jetons Nombre de jetons qui ont déjà été joué
 @ nb        Le nombre de cases qui doivent être alignées pour finir
 @ return    True si l'état est terminal/False sinon
 '''
-def Terminal_Test(plateau,nb=4):
+def Terminal_Test(plateau,nb_jetons,nb=4):
     state = plateau.myMat
     nb_Ligne, nb_Colonne = np.shape(state) #Récupère les dimensions de la matrice avec numpy
     end_Game = False 
@@ -117,10 +119,9 @@ def Terminal_Test(plateau,nb=4):
                     if(cpt==nb):
                         return True #Un joueur a gagné
 
-    #CAS 2 : Jeu plein
-    end_Game = True
-    if(np.any(state[0, : ] == empty_box)): #Si au moins une case de la ligne du sommet == "."
-        end_Game = False #Au moins une case est vide donc la matrice n'est pas pleine
+    #CAS 2 : Nombre maximum de jetons atteints
+    if(nb_jetons == nb_jetons_max): # Si on a atteint le nombre de jetons maximum
+        end_Game = True 
     return end_Game
 
 '''

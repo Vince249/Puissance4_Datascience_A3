@@ -8,12 +8,13 @@ mais ici on va élaguer des options afin de gagner en rapidité d'exécution
 
 @ state     Une liste de liste au format d'un tabelau multi-dimensionnel avec les symboles correspondants
 @ joueur    Le symbole correspondant au joueur (X/O)
+@ nb_jetons Nombre de jetons qui ont déjà été joué
 @ return    Une action optimale à faire par le joueur
 '''
-def Alpha_Beta(state,joueur):
+def Alpha_Beta(state,joueur,nb_jetons):
     if(joueur == 'X') : opposant = 'O'
     if(joueur == 'O') : opposant = 'X'
-    resultat = Max_Value_Alpha_Beta(state,joueur,opposant, -10000000000, 10000000000, 0, max_Depth)
+    resultat = Max_Value_Alpha_Beta(state,joueur,opposant, -10000000000, 10000000000, 0, max_Depth,nb_jetons)
     return resultat
 
 
@@ -27,12 +28,14 @@ Reflexion pour le tour de l'opposant, qui va prendre l'action qui a le gain mini
 @ beta      La valeur min déjà obtenue avec les autres options à cet étage, permet de déterminer quand faire une coupure beta
 @ prof_act  La profondeur actuelle
 @ prof_max  La profondeur max a laquelle on descend   
+@ nb_jetons Nombre de jetons qui ont déjà été joué
 @ return    La valeur de l'utility d'un état
 """
 
-def Min_Value_Alpha_Beta(state,joueur,opposant,alpha,beta,prof_act,prof_max):
-    if(Fonctions_de_base.Terminal_Test(state) or prof_act==prof_max) : return Fonctions_de_base.Utility_Vincent_Remi(state,joueur,opposant)
+def Min_Value_Alpha_Beta(state,joueur,opposant,alpha,beta,prof_act,prof_max,nb_jetons):
+    if(Fonctions_de_base.Terminal_Test(state,nb_jetons) or prof_act==prof_max) : return Fonctions_de_base.Utility_Vincent_Remi(state,joueur,opposant)
     prof_act+=1
+    nb_jetons+=1
     #valeur infiniment haute
     v = 10000000000
     #Ici ce sont les actions de l'opposant qu'on prend car c'est son tour
@@ -60,7 +63,7 @@ def Min_Value_Alpha_Beta(state,joueur,opposant,alpha,beta,prof_act,prof_max):
     #! FIN Diminution de l'amplitude de l'arbre
 
     for a in liste_action_conservees:
-        v = min(v,Max_Value_Alpha_Beta(Fonctions_de_base.Result(state,a,opposant),joueur,opposant,alpha,beta,prof_act,prof_max))
+        v = min(v,Max_Value_Alpha_Beta(Fonctions_de_base.Result(state,a,opposant),joueur,opposant,alpha,beta,prof_act,prof_max,nb_jetons))
         if (v <= alpha) : return v
         beta = min(beta,v)
     return v
@@ -76,13 +79,15 @@ Reflexion pour le tour du joueur, qui va prendre l'action qui a le gain maximum 
 @ beta      La valeur min déjà obtenue avec les autres options à cet étage, permet de déterminer quand faire une coupure beta
 @ prof_act  La profondeur actuelle
 @ prof_max  La profondeur max a laquelle on descend  
+@ nb_jetons Nombre de jetons qui ont déjà été joué
 @ return            La valeur de l'utility d'un état (+ l'action associée)
 '''
 
 
-def Max_Value_Alpha_Beta(state,joueur,opposant,alpha,beta, prof_act,prof_max):
-    if(Fonctions_de_base.Terminal_Test(state) or prof_act==prof_max ) : return Fonctions_de_base.Utility_Vincent_Remi(state,joueur,opposant)
+def Max_Value_Alpha_Beta(state,joueur,opposant,alpha,beta, prof_act,prof_max,nb_jetons):
+    if(Fonctions_de_base.Terminal_Test(state,nb_jetons) or prof_act==prof_max ) : return Fonctions_de_base.Utility_Vincent_Remi(state,joueur,opposant)
     prof_act+=1
+    nb_jetons+=1
     #valeur infiniment basse
     v = -1000000000000
     if(prof_act==1):
@@ -112,7 +117,7 @@ def Max_Value_Alpha_Beta(state,joueur,opposant,alpha,beta, prof_act,prof_max):
 
         for a in liste_action_conservees:
             ancien_v = v
-            v = max(v,Min_Value_Alpha_Beta(Fonctions_de_base.Result(state,a,joueur),joueur,opposant,alpha,beta,prof_act,prof_max))
+            v = max(v,Min_Value_Alpha_Beta(Fonctions_de_base.Result(state,a,joueur),joueur,opposant,alpha,beta,prof_act,prof_max,nb_jetons))
             if(ancien_v < v): sauvegarde_action=a
             if (v >= beta) : return [v,sauvegarde_action]
             alpha = max(alpha,v)
@@ -142,7 +147,7 @@ def Max_Value_Alpha_Beta(state,joueur,opposant,alpha,beta, prof_act,prof_max):
     #! FIN Diminution de l'amplitude de l'arbre
 
     for a in liste_action_conservees:
-        v = max(v,Min_Value_Alpha_Beta(Fonctions_de_base.Result(state,a,joueur),joueur,opposant,alpha,beta,prof_act,prof_max))
+        v = max(v,Min_Value_Alpha_Beta(Fonctions_de_base.Result(state,a,joueur),joueur,opposant,alpha,beta,prof_act,prof_max,nb_jetons))
         if (v >= beta) : return v
         alpha = max(alpha,v)
     return v

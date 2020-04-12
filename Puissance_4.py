@@ -75,6 +75,7 @@ if __name__ == '__main__':
         clear()
 
     plateau = Initialisation.Plateau()
+    nb_jetons = 0
     check_partie_fini = False
     while(not check_partie_fini):
 
@@ -89,11 +90,12 @@ if __name__ == '__main__':
                 action = Selection_colonne('\nHumain, indique la colonne dans laquelle tu veux placer ton pion (0-11) \n')
                 if(action in list_Actions):
                     action_Autorise = True
-
             plateau = Fonctions_de_base.Result(plateau,action,humain)        
+            nb_jetons+=1
             #!Si la partie est finie, l'IA ne joue pas
-            check_partie_fini = Fonctions_de_base.Terminal_Test(plateau)
+            check_partie_fini = Fonctions_de_base.Terminal_Test(plateau,nb_jetons)
             if(check_partie_fini) : break
+            
 
         #! L'IA détermine son play ici
         print()
@@ -101,15 +103,16 @@ if __name__ == '__main__':
         list_Actions = Fonctions_de_base.Action(plateau) #On recupere toutes les actions possibles
         print("Action(s) possible(s) pour l'IA : ", list_Actions)        
 
-        action=AlphaBetaMiniMax.Alpha_Beta(plateau,ia)
+        action=AlphaBetaMiniMax.Alpha_Beta(plateau,ia,nb_jetons)
         
         #action contient la value et l'action associée
         clear()
         print("L'IA joue : "+ str(action[1]))
         print()
         plateau = Fonctions_de_base.Result(plateau,action[1],ia)
+        nb_jetons+=1
         #!Si la partie est finie, l'humain ne joue pas
-        check_partie_fini = Fonctions_de_base.Terminal_Test(plateau)
+        check_partie_fini = Fonctions_de_base.Terminal_Test(plateau,nb_jetons)
         if(check_partie_fini) : break
 
         if(first == ia): #Si l'IA joue en premier maintenant c'est le tour de l'Humain
@@ -125,8 +128,9 @@ if __name__ == '__main__':
                     action_Autorise = True
             clear()
             plateau = Fonctions_de_base.Result(plateau,action,humain)
+            nb_jetons+=1
             #!Si la partie est finie, l'IA ne joue pas
-            check_partie_fini = Fonctions_de_base.Terminal_Test(plateau)
+            check_partie_fini = Fonctions_de_base.Terminal_Test(plateau,nb_jetons)
             if(check_partie_fini) : break
 
     print(plateau)
