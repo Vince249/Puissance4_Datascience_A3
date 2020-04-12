@@ -73,6 +73,7 @@ class Plateau:
 
 
 if __name__ == '__main__':
+    # Quelques tests
     mat = Plateau()
     mat[0,0]='X'
     mat[3,0]='X'

@@ -47,9 +47,9 @@ def Result(state,action,joueur):
 
 '''
 Fonction gravité pour une colonne, elle return la ligne à laquelle on peut placer un symbole
-@state      tableau multi-dimensionnel
-@column     valeur de la colonne à analyser
-@return     retourne la valeur x de la ligne libre ou -1 s'il n'y en a pas
+@ state     Une liste de liste au format d'un tabelau multi-dimensionnel avec les symboles correspondants
+@ column    Valeur de la colonne à analyser
+@ return    Retourne la valeur x de la ligne libre ou -1 s'il n'y en a pas
 '''
 def Gravity(state, column):
 
@@ -134,6 +134,7 @@ Détermine l'intérêt d'un état
 #! Cette heuristique s'appuie sur le nombre de coup gagnant dans lequel chaque position peut être impliquée
 #! Elle fonctionne pour un plateau normal de puissance 4 mais pas pour le nôtre car les dimensions sont trop grandes
 #! Il n'y a pas assez de différence entre les values des différents plays
+#! Et étant donné la grandeur de notre plateau, il faudrait envisager une utility dynamique (qui recalcule la valeur de chaque case à chaque coup)
 '''
 def Utility_Armand (state, joueur, opposant):
 
@@ -244,102 +245,112 @@ def Utility_Armand (state, joueur, opposant):
     
     return result
 
-
+'''
+Détermine l'intérêt de la case regardée en fonction du nombre d'alignements réalisé ou réalisable à partir de cette case
+@ state     Tableau multi-dimensionnel
+@ joueur    Le symbole correspondant au joueur voulant gagner (X/O)
+@ opposant  Le symbole correspondant au joueur voulant perdre (X/O)
+@ i         Ligne de la case regardée
+@ j         Colonne de la case regardée
+@ return    Valeur de la case regardée
+'''
 def Combinaisons_potentielle_win(state,joueur,opposant,i,j):
     
     result = 0
+    # Nous n'avons pas utilisé de string pour les keys car nous avions besoin de pouvoir de changer de keys comme on peut le faire avec des index
+    # Le dico contient des listes de symboles ('X'/'O'/'.') aux index impairs et leur position correspondante aux index pairs 
     dico = {
-        0 : [], #pos_column_up
-        1 : [], #'val_column_up'
+        0 : [], # pos_column_up
+        1 : [], # val_column_up
 
-        2 : [], #'pos_diag_up_right'
-        3 : [], #'val_diag_up_right'
+        2 : [], # pos_diag_up_right
+        3 : [], # val_diag_up_right
 
-        4 : [], #'pos_side_right'
-        5 : [], #'val_side_right'
+        4 : [], # pos_side_right 
+        5 : [], # val_side_right 
 
-        6 : [], #'pos_diag_bot_right'
-        7 : [], #'val_diag_bot_right'
+        6 : [], # pos_diag_bot_right 
+        7 : [], # val_diag_bot_right
 
-        8 : [], #'pos_diag_bot_left'
-        9 : [],#'val_diag_bot_left'
+        8 : [], # pos_diag_bot_left
+        9 : [], # val_diag_bot_left
 
-        10 : [], #'pos_side_left'
-        11 : [], #'val_side_left'
+        10 : [], # pos_side_left
+        11 : [], # val_side_left
 
         12 : [], #'pos_diag_up_left'
         13 : [], #'val_diag_up_left'
         
         
-        # 'val_column_bot' : [], inutile car on ne peut pas gagner en mettant des pions en bas
-        # 'pos_column_bot' : [], inutile car on ne peut pas gagner en mettant des pions en bas
-        
+        # 'val_column_bot' : [], inutile car on ne peut pas mettre des pions en bas
+        # 'pos_column_bot' : [], inutile car on ne peut pas mettre des pions en bas       
     }
     
 
+    for w in range(0,4): #On regarde les 4 cases autour de la case regardée dans toutes les directions 
 
-    for w in range(0,4): #On regarde les lignes au dessus
-
-        if(i>=3): # Place en haut
+        if(i>=3): # Place en haut = on peut faire des colonnes
             #* colonne up
             dico[1].append(state[i-w,j])
             dico[0].append([i-w,j])
-
-            
+           
             #* Check diagonale gauche haut
-            if(j>=3): # Place à gauche
+            if(j>=3): # Place en haut + à gauche = on peut faire des diagonales hautes gauches
                 dico[13].append(state[i-w,j-w])
                 dico[12].append([i-w,j-w])
 
-
             #* Check diagonale droit haut
-            if(j<=8): # Place à droite
+            if(j<=8): # Place en haut + à droite = on peut faire des diagonales hautes droites
                 dico[3].append(state[i-w,j+w])
                 dico[2].append([i-w,j+w])
-        
-        
-
-        if(j>=3): # Place à gauche
+                
+        if(j>=3): # Place à gauche = on peut faire des lignes gauches
             #* side left
             dico[11].append(state[i,j-w])
             dico[10].append([i,j-w])
-
-            
+           
             #* Check diagonale gauche bas
-            if(i<=2): # Place en bas
+            if(i<=2): # Place à gauche + en bas = on peut faire des diagonales basses gauches
                 dico[9].append(state[i+w,j-w])
                 dico[8].append([i+w,j-w])
 
-        if(j<=8): # Place à droite
+        if(j<=8): # Place à droite = on peut faire des lignes droites
             #* side right
             dico[5].append(state[i,j+w])
             dico[4].append([i,j+w])
-
-            
+           
             #* Check diagonale droite bas
-            if(i<=2): # Place en bas
+            if(i<=2): # Place à droite + en bas = on peut faire des diagonales basses droites
                 dico[7].append(state[i+w,j+w])
                 dico[6].append([i+w,j+w])
 
-    for y in range(0,13,2):
-        if(opposant not in dico[y+1] and len(dico[y+1]) != 0 ): #Si l'adversaire n'est pas présent
-            compteur = dico[y+1].count(joueur)
+    for y in range(0,13,2): # On parcourt toutes les listes du dico en allant de 2 en 2 pour accéder aux listes de symboles et leur position correspondante sur une itération
+        if(opposant not in dico[y+1] and len(dico[y+1]) != 0 ): #Si l'adversaire n'est pas présent et que la liste n'est pas vide
+            compteur = dico[y+1].count(joueur) # On compte le nombre de fois que le joueur apparait dans la liste (= l'alignement)
             distance = 0
             for i in range(4) :
-                if(dico[y+1][i]=='.' and y != 0): #on regarde pas la distance pour la colonne
-                    distance += Gravity(state,dico[y][i][1])- dico[y][i][0]
+                if(dico[y+1][i]=='.' and y != 0): # On parcourt chaque liste de symboles (on ne regarde pas la distance pour la colonne)
+                    distance += Gravity(state,dico[y][i][1])- dico[y][i][0] # Nombre de cases 'vides' avant d'atteindre la position qu permettra l'alignement
 
-            result += (compteur**2)/(distance+1) 
-            if(compteur ==4): result += 10000
-    
+            result += (compteur**2)/(distance+1) # On met '+1' pour la distance pour éviter la division par 0
+            if(compteur == 4): # On a un alignement de 4 donc un gagnant
+                result += 10000 
+
     return result
 
-
+'''
+Détermine l'intérêt d'un état
+@ state     Tableau multi-dimensionnel
+@ joueur    Le symbole correspondant au joueur (X/O)
+@ opposant  Le symbole correspondant à l'opposant (X/O)
+@ return    Valeur du state pour le joueur
+'''
 def Utility_Vincent_Remi(state,joueur,opposant):
 
     result = 0
     for i in range(state.size_Ligne):
         for j in range(state.size_Colonne):
+            # On va regarder chaque case contenant un jeton ('X'/'O') et result = somme de la valeur de toutes les cases
             if(state[i,j] == joueur):
                 result += Combinaisons_potentielle_win (state,joueur,opposant,i,j)
             elif(state[i,j] == opposant ):
@@ -347,7 +358,13 @@ def Utility_Vincent_Remi(state,joueur,opposant):
 
     return result
 
-
+'''
+Détermine le gagnant d'une partie
+@ state     Tableau multi-dimensionnel
+@ joueur    Le symbole correspondant au joueur (X/O)
+@ opposant  Le symbole correspondant à l'opposant (X/O)
+@ return    Le gagnant
+'''
 def Win_Lose(state, joueur, opposant):
     nb_Ligne, nb_Colonne = np.shape(state.myMat) #Récupère les dimensions de la matrice avec numpy
     end_Game = False 
@@ -427,8 +444,8 @@ def Win_Lose(state, joueur, opposant):
                         end_Game = True
                         break            
 
-    #CAS 2 : Jeu plein
-    #Si egalite alors winner n'a jamais ete chnage et est tjrs == empty_box
+    #CAS 2 : On a atteint la limite de jetons donc égalité
+    #Dans ce cas winner n'a jamais été changé et est toujours == empty_box
 
     return winner
             

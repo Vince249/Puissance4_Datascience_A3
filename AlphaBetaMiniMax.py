@@ -4,9 +4,9 @@ pourcentage_amplitude = 0.6
 max_Depth = 4 #Profondeur maximale
 ''' 
 Renvoie le meilleur play à faire suivant le state donné en considérant que l'adversaire va faire les plays optimum
-mais ici on va élaguer des options afin de gagner en rapidité d'exécution (remplacerai fonction MiniMax)
+mais ici on va élaguer des options afin de gagner en rapidité d'exécution
 
-@ state     Une liste de liste au format [[-,-,-],[-,-,-],[-,-,-]] avec les symboles correspondants
+@ state     Une liste de liste au format d'un tabelau multi-dimensionnel avec les symboles correspondants
 @ joueur    Le symbole correspondant au joueur (X/O)
 @ return    Une action optimale à faire par le joueur
 '''
@@ -20,13 +20,13 @@ def Alpha_Beta(state,joueur):
 """
 Reflexion pour le tour de l'opposant, qui va prendre l'action qui a le gain minimum pour le joueur avec la méthode alpha beta (plus opti)
 
-@ state     Une liste de liste au format [[-,-,-],[-,-,-],[-,-,-]] avec les symboles correspondants
+@ state     Une liste de liste au format d'un tabelau multi-dimensionnel avec les symboles correspondants
 @ joueur    Le symbole correspondant au joueur (X/O)
 @ opposant  Le symbole correspondant à l'adversaire (X/O)
 @ alpha     La valeur max déjà obtenue avec les autres options à cet étage, permet de déterminer quand faire une coupure alpha
 @ beta      La valeur min déjà obtenue avec les autres options à cet étage, permet de déterminer quand faire une coupure beta
-@ prof_max  La profondeur max a laquelle on descend   
 @ prof_act  La profondeur actuelle
+@ prof_max  La profondeur max a laquelle on descend   
 @ return    La valeur de l'utility d'un état
 """
 
@@ -69,12 +69,13 @@ def Min_Value_Alpha_Beta(state,joueur,opposant,alpha,beta,prof_act,prof_max):
 '''
 Reflexion pour le tour du joueur, qui va prendre l'action qui a le gain maximum pour lui avec la méthode alpha beta (plus opti)
 
-@ state             Une liste de liste au format [[-,-,-],[-,-,-],[-,-,-]] avec les symboles correspondants
-@ joueur            Le symbole correspondant au joueur (X/O)
-@ opposant          Le symbole correspondant à l'adversaire (X/O)
-@ alpha             La valeur max déjà obtenue avec les autres options à cet étage, permet de déterminer quand faire une coupure alpha
-@ beta              La valeur min déjà obtenue avec les autres options à cet étage, permet de déterminer quand faire une coupure beta
-@ renvoyer_action   Détermine s'il faut uniquement renvoyer la value ou aussi l'action associée
+@ state     Une liste de liste au format d'un tabelau multi-dimensionnel avec les symboles correspondants
+@ joueur    Le symbole correspondant au joueur (X/O)
+@ opposant  Le symbole correspondant à l'adversaire (X/O)
+@ alpha     La valeur max déjà obtenue avec les autres options à cet étage, permet de déterminer quand faire une coupure alpha
+@ beta      La valeur min déjà obtenue avec les autres options à cet étage, permet de déterminer quand faire une coupure beta
+@ prof_act  La profondeur actuelle
+@ prof_max  La profondeur max a laquelle on descend  
 @ return            La valeur de l'utility d'un état (+ l'action associée)
 '''
 
