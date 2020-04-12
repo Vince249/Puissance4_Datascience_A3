@@ -189,10 +189,10 @@ def Selection_colonne(phrase):
 
 if __name__ == '__main__': 
     #! PARAMETRISATION
-    humain_prof_max = 4
-    ia_prof_max = 6
+    humain_prof_max = 7
+    ia_prof_max = 4
     humain_pourcentage = 0.4
-    ia_pourcentage = 0.45
+    ia_pourcentage = 0.6
 
     win_IA = 0
     win_Humain = 0
@@ -248,6 +248,7 @@ if __name__ == '__main__':
         if(first == ia): #Si l'IA joue en premier maintenant c'est le tour de l'Humain
             montemps=time.time()
             action = Alpha_Beta(plateau, humain, humain_prof_max, humain_pourcentage)
+            nv_Temps = time.time()
             if(nv_Temps - montemps >= temps_Max_Calcul):
                 discalifie = humain
                 break
