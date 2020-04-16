@@ -36,14 +36,15 @@ class Plateau:
     def __str__(self):
         
         for j in range(0,self.size_Colonne):
-            print(("  "+ str(j) + " ") if(j<10)else ("  "+ str(j) +""), end="") 
+            print(("  "+ str(j+1) + " ") if(j<10)else (str(j+1) +"  " ), end="") #Num des colonnes (commençant à 1 pr les humains, 0 pr le programme)
             #Léger bricolage : Amélioration possible avec un autre affichage : Tkinter / GUI
         print()
         for i in range(0,self.size_Ligne):
             for j in range(0,self.size_Colonne):
                 print("|", end = " ")
                 print (self.myMat[i,j], sep="",end=" ")
-            print("| " + str(i), end = " ")       
+            print("|", end = " ")
+            #print("| " + str(i), end = " ")       
             print("")
         for j in range(0,self.size_Colonne*4+1):
             print("-", end="")
@@ -75,8 +76,8 @@ class Plateau:
 if __name__ == '__main__':
     # Quelques tests
     mat = Plateau()
-    mat[0,0]='X'
-    mat[3,0]='X'
+    #mat[0,0]='X'
+    #mat[3,0]='X'
     print(mat)
-    print(mat[3,0])
+    #print(mat[3,0])
 

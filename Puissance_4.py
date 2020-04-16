@@ -82,18 +82,20 @@ if __name__ == '__main__':
         if(first == humain): #Si l'humain joue en premier
             print(plateau)
             list_Actions = Fonctions_de_base.Action(plateau) #On recupere toutes les actions possibles
+            for i in range(len(list_Actions)):
+                list_Actions[i] += 1
             print("Action(s) possible(s) : ", list_Actions)
             print("\n" + Reaction())#Pour rendre le jeu plus vivant
             action = ""
             action_Autorise = False #Verification que ce coup est autorise
             while(action_Autorise == False): 
-                action = Selection_colonne('\nHumain, indique la colonne dans laquelle tu veux placer ton pion (0-11) \n')
+                action = Selection_colonne('\nHumain, indique la colonne dans laquelle tu veux placer ton pion (1-12) \n')
                 if(action in list_Actions):
                     action_Autorise = True
-            plateau = Fonctions_de_base.Result(plateau,action,humain)        
+            plateau = Fonctions_de_base.Result(plateau, action-1, humain) #action-1 car si on rentre 1 alors c'est l'index 0 de la colonne
             nb_jetons+=1
             #!Si la partie est finie, l'IA ne joue pas
-            check_partie_fini = Fonctions_de_base.Terminal_Test(plateau,nb_jetons)
+            check_partie_fini = Fonctions_de_base.Terminal_Test(plateau, nb_jetons)
             if(check_partie_fini) : break
             
 
@@ -101,13 +103,15 @@ if __name__ == '__main__':
         print()
         print(plateau)
         list_Actions = Fonctions_de_base.Action(plateau) #On recupere toutes les actions possibles
+        for i in range(len(list_Actions)):
+                list_Actions[i] += 1
         print("Action(s) possible(s) pour l'IA : ", list_Actions)        
 
         action=AlphaBetaMiniMax.Alpha_Beta(plateau,ia,nb_jetons)
         
         #action contient la value et l'action associée
         clear()
-        print("L'IA joue : "+ str(action[1]))
+        print("L'IA joue : "+ str(action[1] + 1))#On rajoute +1 pr etre dans le referenciel humain (commence a 1, fini a 12)
         print()
         plateau = Fonctions_de_base.Result(plateau,action[1],ia)
         nb_jetons+=1
@@ -118,16 +122,18 @@ if __name__ == '__main__':
         if(first == ia): #Si l'IA joue en premier maintenant c'est le tour de l'Humain
             print(plateau)
             list_Actions = Fonctions_de_base.Action(plateau) #On recupere toutes les actions possibles
+            for i in range(len(list_Actions)):
+                list_Actions[i] += 1
             print("Action(s) possible(s) : ", list_Actions)
             print("\n" + Reaction())#Pour rendre le jeu plus vivant
             action = ""
             action_Autorise = False #Verification que ce coup est autorise
             while(action_Autorise == False): 
-                action = Selection_colonne('\nHumain, indique la colonne dans laquelle tu veux placer ton pion (0-11) \n')
+                action = Selection_colonne('\nHumain, indique la colonne dans laquelle tu veux placer ton pion (1-12) \n')
                 if(action in list_Actions):
                     action_Autorise = True
             clear()
-            plateau = Fonctions_de_base.Result(plateau,action,humain)
+            plateau = Fonctions_de_base.Result(plateau, action-1, humain) #action-1 car si on rentre 1 alors c'est l'index 0 de la colonne
             nb_jetons+=1
             #!Si la partie est finie, l'IA ne joue pas
             check_partie_fini = Fonctions_de_base.Terminal_Test(plateau,nb_jetons)
