@@ -1,4 +1,5 @@
 import numpy as np
+import colorama
 
 class Plateau:
 
@@ -41,9 +42,15 @@ class Plateau:
         print()
         for i in range(0,self.size_Ligne):
             for j in range(0,self.size_Colonne):
-                print("|", end = " ")
-                print (self.myMat[i,j], sep="",end=" ")
-            print("|", end = " ")
+                print(colorama.Fore.RESET + "|", end = " ")
+                if (self.myMat[i,j] == 'X'):
+                    print (colorama.Fore.RED + 'X', sep="",end=" ")
+                if (self.myMat[i,j] == 'O'):
+                    print (colorama.Fore.YELLOW + 'O', sep="",end=" ")
+                if (self.myMat[i,j] == '.'):
+                    print ('.', sep="",end=" ")
+                #print (self.myMat[i,j], sep="",end=" ") #-> print de base
+            print(colorama.Fore.RESET + "|", end = " ")
             #print("| " + str(i), end = " ")       
             print("")
         for j in range(0,self.size_Colonne*4+1):
@@ -78,6 +85,6 @@ if __name__ == '__main__':
     mat = Plateau()
     #mat[0,0]='X'
     #mat[3,0]='X'
-    print(mat)
+    #print(mat)
     #print(mat[3,0])
-
+    print(colorama.Fore.YELLOW + 'ce texte est rouge')
