@@ -36,7 +36,7 @@ class Plateau:
     def __str__(self):
         
         for j in range(0,self.size_Colonne):
-            print(("  "+ str(j+1) + " ") if(j<10)else (str(j+1) +"  " ), end="") #Num des colonnes (commençant à 1 pr les humains, 0 pr le programme)
+            print(("  "+ str(j+1) + " ") if(j<10)else (" " + str(j+1) + " " ), end="") #Num des colonnes (commençant à 1 pr les humains, 0 pr le programme)
             #Léger bricolage : Amélioration possible avec un autre affichage : Tkinter / GUI
         print()
         for i in range(0,self.size_Ligne):
