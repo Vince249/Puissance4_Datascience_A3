@@ -105,13 +105,17 @@ if __name__ == '__main__':
         list_Actions = Fonctions_de_base.Action(plateau) #On recupere toutes les actions possibles
         for i in range(len(list_Actions)):
                 list_Actions[i] += 1
-        print("Action(s) possible(s) pour l'IA : ", list_Actions)        
+        print("Action(s) possible(s) pour l'IA : ", list_Actions)      
 
+        tps_IA=time.time() #Temps de reference pr le chronometre en seconde
         action=AlphaBetaMiniMax.Alpha_Beta(plateau,ia,nb_jetons)
+        nv_Temps = time.time()
+        print("L'IA joue en ",nv_Temps - tps_IA," sec")
         
         #action contient la value et l'action associée
         clear()
         print("L'IA joue : "+ str(action[1] + 1))#On rajoute +1 pr etre dans le referenciel humain (commence a 1, fini a 12)
+        print("L'IA joue en %.2f sec" %(nv_Temps - tps_IA))
         print()
         plateau = Fonctions_de_base.Result(plateau,action[1],ia)
         nb_jetons+=1

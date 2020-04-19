@@ -1,6 +1,6 @@
 import Fonctions_de_base
 
-pourcentage_amplitude = 0.5
+pourcentage_amplitude = 0.6
 max_Depth = 6 #Profondeur maximale
 ''' 
 Renvoie le meilleur play à faire suivant le state donné en considérant que l'adversaire va faire les plays optimum
