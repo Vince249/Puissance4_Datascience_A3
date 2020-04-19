@@ -53,7 +53,7 @@ def Reaction():
 if __name__ == '__main__': 
     #! Début du code
     clear()
-    Intro()
+    #Intro()
     print('Début de la nouvelle partie !')
 
     #Choix symbole
@@ -85,7 +85,7 @@ if __name__ == '__main__':
             for i in range(len(list_Actions)):
                 list_Actions[i] += 1
             print("Action(s) possible(s) : ", list_Actions)
-            print("\n" + Reaction())#Pour rendre le jeu plus vivant
+        #    print("\n" + Reaction())#Pour rendre le jeu plus vivant
             action = ""
             action_Autorise = False #Verification que ce coup est autorise
             while(action_Autorise == False): 
@@ -129,7 +129,7 @@ if __name__ == '__main__':
             for i in range(len(list_Actions)):
                 list_Actions[i] += 1
             print("Action(s) possible(s) : ", list_Actions)
-            print("\n" + Reaction())#Pour rendre le jeu plus vivant
+      #      print("\n" + Reaction())#Pour rendre le jeu plus vivant
             action = ""
             action_Autorise = False #Verification que ce coup est autorise
             while(action_Autorise == False): 

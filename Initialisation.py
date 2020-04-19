@@ -2,7 +2,6 @@ import numpy as np
 import colorama
 
 class Plateau:
-
     """
     Initialise le plateau de jeu : Une matrice =  Tableau multi-dimensionnel
     """
@@ -40,6 +39,7 @@ class Plateau:
             print(("  "+ str(j+1) + " ") if(j<10)else (" " + str(j+1) + " " ), end="") #Num des colonnes (commençant à 1 pr les humains, 0 pr le programme)
             #Léger bricolage : Amélioration possible avec un autre affichage : Tkinter / GUI
         print()
+        colorama.init()
         for i in range(0,self.size_Ligne):
             for j in range(0,self.size_Colonne):
                 print(colorama.Fore.RESET + "|", end = " ")
@@ -53,6 +53,7 @@ class Plateau:
             print(colorama.Fore.RESET + "|", end = " ")
             #print("| " + str(i), end = " ")       
             print("")
+        colorama.deinit()
         for j in range(0,self.size_Colonne*4+1):
             print("-", end="")
 
@@ -87,4 +88,6 @@ if __name__ == '__main__':
     #mat[3,0]='X'
     #print(mat)
     #print(mat[3,0])
+    colorama.init()
     print(colorama.Fore.YELLOW + 'ce texte est rouge')
+    colorama.deinit()
