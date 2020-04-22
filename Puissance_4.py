@@ -110,7 +110,6 @@ if __name__ == '__main__':
         tps_IA=time.time() #Temps de reference pr le chronometre en seconde
         action=AlphaBetaMiniMax.Alpha_Beta(plateau,ia,nb_jetons)
         nv_Temps = time.time()
-        print("L'IA joue en ",nv_Temps - tps_IA," sec")
         
         #action contient la value et l'action associée
         clear()
