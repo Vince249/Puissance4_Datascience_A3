@@ -1,3 +1,8 @@
+'''
+#! Ce code a été utilisé pour générer les tableaux Excels mentionnés dans le rapport et joints
+#! Il n'est pas utile dans l'utilisation de l'IA mais nous a permis de régler ses paramètres
+
+'''
 import Fonctions_de_base
 import Initialisation
 import time
