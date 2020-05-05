@@ -146,13 +146,11 @@ if __name__ == '__main__':
     print('La partie est terminée, bien joué à vous deux !\n\n')
     winner = Fonctions_de_base.Win_Lose(plateau, ia, humain)
     if(winner == ia):
-        print("Malheureusement c'en est fini de ce petit jeu !!!\nTu n'es pas digne de rencontrer ma Déesse !")
+        print("L'IA remporte la partie")
     elif(winner == humain):
-        print("CHAMPION ! Tu as mon plus grand respect !!!\nAprès ton entrevue avec Athéna tu prendras ma place !",
-            "\n\nMille mercis ! Je peux enfin prendre des vacances !")
+        print("L'adversaire remporte la partie")
     else:
         print("Limite de %d jetons atteinte" %Fonctions_de_base.nb_jetons_max)
-        print("Ce combat fut des plus rudes !\nVa brave guerrier ! Nous croiserons de nouveau nos pions !")
 
 
 
